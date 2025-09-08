@@ -8,10 +8,18 @@
     <style>
         /* Estilos personalizados para que coincida con el diseño */
         html, body {
+            height: 100%;
             overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        #app-container {
+            min-height: 100vh; /* Asegura que ocupe al menos el 100% de la altura del viewport */
+            display: flex;
+            flex-direction: column;
         }
         .header-app {
             background-color: #5a1a2e; /* Tono vino/rojo oscuro */
@@ -20,6 +28,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-shrink: 0; /* Evita que el header se encoja */
         }
         .header-logo {
             display: flex;
@@ -28,7 +37,6 @@
         .header-logo img {
             height: 40px;
             margin-right: 10px;
-            filter: brightness(0) invert(1); /* Logo blanco */
         }
         .header-logo-text {
             font-weight: bold;
@@ -36,9 +44,15 @@
         }
         .screen {
             display: none; /* Ocultar todas las pantallas por defecto */
+            flex-grow: 1; /* Permite que la pantalla crezca y ocupe el espacio */
+            display: flex;
+            flex-direction: column;
         }
         .screen.active {
-            display: block; /* Mostrar solo la pantalla activa */
+            display: flex; /* Cambiado a flex para controlar el crecimiento */
+        }
+        #menu-screen > .main-menu-grid {
+             flex-grow: 1; /* Hace que la grilla del menú ocupe todo el espacio sobrante */
         }
         .main-menu-grid {
             display: grid;
@@ -55,6 +69,10 @@
             color: white;
             cursor: pointer;
             transition: background-color: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .menu-item:hover {
             background-color: rgba(0, 0, 0, 0.4);
@@ -63,9 +81,13 @@
             font-size: 3rem;
             margin-bottom: 0.5rem;
         }
+        .form-page {
+            flex-grow: 1;
+        }
         .form-container {
             padding: 1.5rem;
             padding-bottom: 4rem; /* Espacio extra al final */
+            overflow-y: auto; /* Permite scroll si el formulario es largo */
         }
         .form-title-section {
             background-color: #5a1a2e;
@@ -103,7 +125,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <div id="app-container" class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
+    <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg">
 
         <!-- ============================================= -->
         <!-- PANTALLA DE INICIO DE SESIÓN (LOGIN)          -->
@@ -111,7 +133,7 @@
         <div id="login-screen" class="screen active">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="logo.png" alt="Ravens Logo">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -141,7 +163,7 @@
         <div id="menu-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="logo.png" alt="Ravens Logo">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -184,14 +206,13 @@
         <!-- ============================================= -->
         
         <!-- Contenedor General para todos los formularios -->
-        <div id="forms-container">
-            <!-- Cada formulario es una "pantalla" separada -->
+        <div id="forms-container" style="display: contents;">
             
             <!-- FORMULARIO: Residente -->
             <div id="residente-form" class="screen form-page" data-form-id="Residente">
                 <header class="header-app">
                     <div class="header-logo">
-                        <img src="logo.png" alt="Ravens Logo">
+                        <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                         <span class="header-logo-text">RAVENS ACCESS</span>
                     </div>
                 </header>
@@ -230,7 +251,7 @@
             <div id="visita-form" class="screen form-page" data-form-id="Visita">
                 <header class="header-app">
                     <div class="header-logo">
-                        <img src="logo.png" alt="Ravens Logo">
+                        <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                         <span class="header-logo-text">RAVENS ACCESS</span>
                     </div>
                 </header>
@@ -253,7 +274,7 @@
 
             <!-- FORMULARIO: Evento -->
             <div id="evento-form" class="screen form-page" data-form-id="Evento">
-                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                     <div class="space-y-4">
@@ -269,7 +290,7 @@
 
             <!-- FORMULARIO: Personal de servicio -->
             <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
-                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                      <div class="space-y-4">
@@ -284,7 +305,7 @@
 
             <!-- FORMULARIO: Eliminar qr -->
             <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
-                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                     <div class="space-y-4">
@@ -299,7 +320,7 @@
 
              <!-- FORMULARIO: Incidencias -->
              <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
-                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                      <div class="space-y-4">
@@ -350,16 +371,27 @@
         
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Lógica de Navegación ---
-            const screens = document.querySelectorAll('.screen');
+            const allScreens = document.querySelectorAll('.screen');
+            const formsContainer = document.getElementById('forms-container');
+
             window.showScreen = function(screenId) {
-                screens.forEach(screen => {
-                    screen.classList.remove('active');
-                });
-                const activeScreen = document.getElementById(screenId);
-                if (activeScreen) {
-                    activeScreen.classList.add('active');
+                allScreens.forEach(s => s.classList.remove('active'));
+                
+                const targetScreen = document.getElementById(screenId);
+                
+                // Si la pantalla está dentro del contenedor de formularios, la movemos fuera temporalmente
+                if (formsContainer.contains(targetScreen)) {
+                    document.getElementById('app-container').appendChild(targetScreen);
                 }
+
+                targetScreen.classList.add('active');
+
+                 // Devolvemos todos los formularios (excepto el activo) al contenedor
+                document.querySelectorAll('.form-page').forEach(form => {
+                    if (!form.classList.contains('active')) {
+                        formsContainer.appendChild(form);
+                    }
+                });
             };
             
             // --- Lógica de Login ---
@@ -393,7 +425,7 @@
                     inputs.forEach(input => {
                         data[input.dataset.field] = input.value;
                         if (!input.value) {
-                           allFieldsValid = false;
+                           allFields-valid = false;
                         }
                     });
 
@@ -450,6 +482,13 @@
                 popup.style.display = 'none';
                 showScreen('menu-screen');
             });
+
+            // Move all forms to the container initially
+            document.querySelectorAll('.form-page').forEach(form => {
+                formsContainer.appendChild(form);
+            });
+            // Show the initial screen
+             showScreen('login-screen');
         });
 
     </script>
