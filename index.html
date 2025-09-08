@@ -377,12 +377,15 @@
 
             const screens = document.querySelectorAll('.screen');
             const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
             const rememberMeCheckbox = document.getElementById('remember-me');
 
             // --- Lógica para "Recordarme" ---
             const rememberedUser = localStorage.getItem('rememberedUser');
-            if (rememberedUser) {
+            const rememberedPass = localStorage.getItem('rememberedPass');
+            if (rememberedUser && rememberedPass) {
                 usernameInput.value = rememberedUser;
+                passwordInput.value = rememberedPass;
                 rememberMeCheckbox.checked = true;
             }
 
@@ -400,16 +403,18 @@
             const loginButton = document.getElementById('login-button');
             loginButton.addEventListener('click', () => {
                 const username = usernameInput.value;
-                const password = document.getElementById('password').value;
+                const password = passwordInput.value;
                 const errorMsg = document.getElementById('login-error');
 
                 if (users[username] && users[username] === password) {
-                    // Si la casilla "Recordarme" está marcada, guarda el usuario
+                    // Si la casilla "Recordarme" está marcada, guarda usuario y contraseña
                     if (rememberMeCheckbox.checked) {
                         localStorage.setItem('rememberedUser', username);
+                        localStorage.setItem('rememberedPass', password);
                     } else {
-                        // Si no, elimina cualquier usuario guardado
+                        // Si no, elimina cualquier dato guardado
                         localStorage.removeItem('rememberedUser');
+                        localStorage.removeItem('rememberedPass');
                     }
                     showScreen('menu-screen');
                     errorMsg.classList.add('hidden');
@@ -499,5 +504,4 @@
     </script>
 </body>
 </html>
-
 
