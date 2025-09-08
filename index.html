@@ -5,346 +5,453 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ravens Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos personalizados para que coincida con el diseño */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        /* Ocultar todas las pantallas por defecto */
+        .header-app {
+            background-color: #5a1a2e; /* Tono vino/rojo oscuro */
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        .header-logo img {
+            height: 40px;
+            margin-right: 10px;
+            filter: brightness(0) invert(1); /* Logo blanco */
+        }
+        .header-logo-text {
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
         .screen {
-            display: none;
+            display: none; /* Ocultar todas las pantallas por defecto */
         }
-        /* Mostrar la pantalla activa */
         .screen.active {
-            display: block;
+            display: block; /* Mostrar solo la pantalla activa */
         }
-        .main-header {
-            background-color: #5a0a1a; /* Un color similar al de las capturas */
+        .main-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            background-color: #5a1a2e;
+        }
+        .menu-item {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .menu-item-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
         }
         .form-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        .form-title-section {
+            background-color: #5a1a2e;
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
+        .home-icon {
+            cursor: pointer;
+        }
+        .form-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn-new {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .btn-save {
+            background-color: #16a34a;
+            color: white;
         }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <div id="app-container" class="max-w-md mx-auto min-h-screen bg-white shadow-lg">
+    <div id="app-container" class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
 
-        <!-- ===== PANTALLA DE LOGIN ===== -->
-        <div id="login-screen" class="screen active p-8 flex flex-col justify-center h-screen">
-            <div class="text-center mb-10">
-                 <div class="flex items-center justify-center space-x-4">
-                    <div class="bg-gray-800 p-2 rounded-lg">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 10.8333 4.5 8 4.5C5.16667 4.5 3 6.66667 3 9.5C3 14 8 18.5 12 21.5C16 18.5 21 14 21 9.5C21 6.66667 18.8333 4.5 16 4.5C13.1667 4.5 12 6.25278 12 6.25278Z"></path></svg>
-                    </div>
-                    <h1 class="text-3xl font-bold text-gray-800">RAVENS ACCESS</h1>
+        <!-- ============================================= -->
+        <!-- PANTALLA DE INICIO DE SESIÓN (LOGIN)          -->
+        <!-- ============================================= -->
+        <div id="login-screen" class="screen active">
+            <header class="header-app">
+                <div class="header-logo">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                    <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
-            </div>
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <label for="username" class="text-sm font-medium text-gray-700">Usuario</label>
-                    <input type="text" id="username" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-800 focus:border-red-800" placeholder="tu.usuario">
-                </div>
-                <div>
-                    <label for="password" class="text-sm font-medium text-gray-700">Contraseña</label>
-                    <input type="password" id="password" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-800 focus:border-red-800" placeholder="••••••••">
-                </div>
-                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#5a0a1a] hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-800">
-                    Iniciar Sesión
-                </button>
-            </form>
-        </div>
-
-        <!-- ===== CONTENEDOR PRINCIPAL DE LA APP (Post-Login) ===== -->
-        <div id="main-app-content" class="hidden">
-            <!-- Header reutilizable -->
-            <header class="main-header text-white p-4 flex items-center justify-between sticky top-0 z-10">
-                 <div class="flex items-center space-x-3">
-                    <div class="bg-white p-1 rounded-md">
-                       <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.25278C12 6.25278 10.8333 4.5 8 4.5C5.16667 4.5 3 6.66667 3 9.5C3 14 8 18.5 12 21.5C16 18.5 21 14 21 9.5C21 6.66667 18.8333 4.5 16 4.5C13.1667 4.5 12 6.25278 12 6.25278Z"></path></svg>
+            </header>
+            <div class="form-container">
+                <h2 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+                        <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">RAVENS ACCESS</h1>
-                        <p class="text-xs">CONTROL DE ACCESO</p>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
-                <button class="go-home">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
-                </button>
-            </header>
-
-            <main id="content-area" class="p-4">
-                <!-- Pantallas de formularios se cargarán aquí -->
-            </main>
-        </div>
-        
-        <!-- ===== MODAL DE CONFIRMACIÓN Y CARGA ===== -->
-        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
-            <div class="bg-white rounded-lg shadow-xl p-6 text-center max-w-sm mx-auto">
-                <div id="modal-loading" class="hidden">
-                    <svg class="animate-spin h-10 w-10 text-[#5a0a1a] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p class="mt-4 text-lg">Guardando datos...</p>
-                </div>
-                <div id="modal-content">
-                    <div id="modal-icon" class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                      <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                    </div>
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4" id="modal-title">¡Éxito!</h3>
-                    <div class="mt-2">
-                        <p class="text-sm text-gray-500" id="modal-message">Los datos se han guardado correctamente.</p>
-                    </div>
-                </div>
-                <div class="mt-5">
-                    <button type="button" id="modal-close-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:text-sm">
-                        Aceptar
+                    <p id="login-error" class="text-red-500 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
+                    <button id="login-button" class="w-full bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700">
+                        Entrar
                     </button>
                 </div>
+            </div>
+        </div>
+
+
+        <!-- ============================================= -->
+        <!-- PANTALLA DEL MENÚ PRINCIPAL                   -->
+        <!-- ============================================= -->
+        <div id="menu-screen" class="screen">
+            <header class="header-app">
+                <div class="header-logo">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                    <span class="header-logo-text">RAVENS ACCESS</span>
+                </div>
+            </header>
+            <div class="main-menu-grid">
+                <!-- Residente -->
+                <div class="menu-item" onclick="showScreen('residente-form')">
+                    <div class="menu-item-icon">👥</div>
+                    <div>Residente</div>
+                </div>
+                <!-- Visita -->
+                <div class="menu-item" onclick="showScreen('visita-form')">
+                    <div class="menu-item-icon">🤝</div>
+                    <div>Visita</div>
+                </div>
+                <!-- Evento -->
+                <div class="menu-item" onclick="showScreen('evento-form')">
+                    <div class="menu-item-icon">📅</div>
+                    <div>Evento</div>
+                </div>
+                <!-- Personal de Servicio -->
+                <div class="menu-item" onclick="showScreen('servicio-form')">
+                    <div class="menu-item-icon">👷</div>
+                    <div>Personal de servicio</div>
+                </div>
+                 <!-- Eliminar QR -->
+                 <div class="menu-item" onclick="showScreen('qr-form')">
+                    <div class="menu-item-icon">🗑️</div>
+                    <div>Eliminar QR</div>
+                </div>
+                <!-- Incidencias -->
+                <div class="menu-item" onclick="showScreen('incidencias-form')">
+                    <div class="menu-item-icon">📱</div>
+                    <div>Incidencias</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- PANTALLAS DE FORMULARIOS                      -->
+        <!-- ============================================= -->
+        
+        <!-- Contenedor General para todos los formularios -->
+        <div id="forms-container">
+            <!-- Cada formulario es una "pantalla" separada -->
+            
+            <!-- FORMULARIO: Residente -->
+            <div id="residente-form" class="screen form-page" data-form-id="Residente">
+                <header class="header-app">
+                    <div class="header-logo">
+                        <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                        <span class="header-logo-text">RAVENS ACCESS</span>
+                    </div>
+                </header>
+                <div class="form-title-section">
+                    <h2 class="form-title">Residente</h2>
+                    <div class="home-icon" onclick="showScreen('menu-screen')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+                    </div>
+                </div>
+                <div class="form-container">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block font-bold">Nombre</label>
+                            <input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        </div>
+                        <div>
+                            <label class="block font-bold">Torre</label>
+                            <input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        </div>
+                        <div>
+                            <label class="block font-bold">Departamento</label>
+                            <input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        </div>
+                        <div>
+                            <label class="block font-bold">Número</label>
+                            <input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <div class="btn btn-new">Nuevo</div>
+                        <div class="btn btn-save">Guardar</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO: Visita -->
+            <div id="visita-form" class="screen form-page" data-form-id="Visita">
+                <header class="header-app">
+                    <div class="header-logo">
+                        <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                        <span class="header-logo-text">RAVENS ACCESS</span>
+                    </div>
+                </header>
+                <div class="form-title-section">
+                    <h2 class="form-title">Visita</h2>
+                     <div class="home-icon" onclick="showScreen('menu-screen')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+                    </div>
+                </div>
+                <div class="form-container">
+                    <div class="space-y-4">
+                        <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    </div>
+                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO: Evento -->
+            <div id="evento-form" class="screen form-page" data-form-id="Evento">
+                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+                <div class="form-container">
+                    <div class="space-y-4">
+                        <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
+                    </div>
+                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO: Personal de servicio -->
+            <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
+                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+                <div class="form-container">
+                     <div class="space-y-4">
+                        <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    </div>
+                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO: Eliminar qr -->
+            <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
+                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+                <div class="form-container">
+                    <div class="space-y-4">
+                        <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Nombre qr</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    </div>
+                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                </div>
+            </div>
+
+             <!-- FORMULARIO: Incidencias -->
+             <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
+                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+                <div class="form-container">
+                     <div class="space-y-4">
+                        <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                        <div><label class="block font-bold">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    </div>
+                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pop-up de confirmación -->
+        <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                <h3 class="text-lg font-bold mb-4">¡Guardado!</h3>
+                <p>Los datos han sido enviados correctamente.</p>
+                <button id="popup-ok-btn" class="mt-6 bg-green-500 text-white px-4 py-2 rounded-md">OK</button>
             </div>
         </div>
 
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
+        // ==================================================================
+        // CONFIGURACIÓN
+        // ==================================================================
 
-        // --- CONFIGURACIÓN ---
-        // IMPORTANTE: Reemplaza esta URL con la URL de tu flujo de Power Automate
-        const POWER_AUTOMATE_URL = 'https://prod-00.westus.logic.azure.com:443/workflows/xxxxxxxx/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=xxxxxxxx';
+        // 1. URL DE POWER AUTOMATE:
+        // Pega aquí la URL HTTP POST que te da tu flujo de Power Automate.
+        const POWER_AUTOMATE_URL = 'URL_DE_POWER_AUTOMATE_AQUI';
 
-        // --- ELEMENTOS DEL DOM ---
-        const screens = document.querySelectorAll('.screen');
-        const loginScreen = document.getElementById('login-screen');
-        const loginForm = document.getElementById('login-form');
-        const mainAppContent = document.getElementById('main-app-content');
-        const contentArea = document.getElementById('content-area');
-        const homeButtons = document.querySelectorAll('.go-home');
-        
-        const modal = document.getElementById('modal');
-        const modalLoading = document.getElementById('modal-loading');
-        const modalContent = document.getElementById('modal-content');
-        const modalMessage = document.getElementById('modal-message');
-        const modalTitle = document.getElementById('modal-title');
-        const modalIcon = document.getElementById('modal-icon');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-
-        // --- DEFINICIÓN DE PANTALLAS (HTML como strings) ---
-
-        const menuScreenHTML = `
-            <div id="menu-screen" class="screen active">
-                <div class="grid grid-cols-2 gap-4">
-                    <button data-target="residente-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        <span class="font-semibold">Residente</span>
-                    </button>
-                    <button data-target="visita-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        <span class="font-semibold">Visita</span>
-                    </button>
-                    <button data-target="evento-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 14v4m-2-2h4"></path></svg>
-                        <span class="font-semibold">Evento</span>
-                    </button>
-                    <button data-target="servicio-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l-2.293-2.293a1 1 0 010-1.414l7-7a1 1 0 011.414 0l7 7a1 1 0 010 1.414L17 21m-7-3a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        <span class="font-semibold">Personal de servicio</span>
-                    </button>
-                    <button data-target="eliminar-qr-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                        <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path><path stroke-linecap="round" stroke-linejoin="round" d="M18 18L6 6m12 0L6 18"></path></svg>
-                        <span class="font-semibold">Eliminar QR</span>
-                    </button>
-                    <button data-target="incidencias-screen" class="menu-item flex flex-col items-center justify-center bg-[#5a0a1a] text-white p-4 rounded-lg shadow-md h-32">
-                       <svg class="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        <span class="font-semibold">Incidencias</span>
-                    </button>
-                </div>
-            </div>`;
-        
-        const createFormHTML = (id, title, fields) => `
-            <div id="${id}" class="screen">
-                <div class="main-header text-white p-4 mb-4 -mx-4 -mt-4 rounded-t-none">
-                    <h2 class="text-2xl font-bold">${title}</h2>
-                </div>
-                <form class="data-form" data-form-id="${id}">
-                    <div class="space-y-4">
-                        ${fields.map(f => `
-                            <div>
-                                <label for="${f.id}" class="block text-sm font-medium text-gray-700">${f.label}</label>
-                                ${f.type === 'select' ? `
-                                    <select id="${f.id}" name="${f.id}" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-red-800 focus:border-red-800 sm:text-sm rounded-md border">
-                                        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
-                                    </select>
-                                ` : `
-                                    <input type="${f.type || 'text'}" name="${f.id}" id="${f.id}" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-red-800 focus:border-red-800">
-                                `}
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="mt-8 grid grid-cols-2 gap-4">
-                        <button type="reset" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">Nuevo</button>
-                        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">Guardar</button>
-                    </div>
-                </form>
-            </div>
-        `;
-        
-        // --- LÓGICA DE LA APLICACIÓN ---
-        
-        const showScreen = (screenId) => {
-            contentArea.innerHTML = ''; // Limpiar área de contenido
-            let screenHTML;
-
-            switch (screenId) {
-                case 'menu-screen':
-                    screenHTML = menuScreenHTML;
-                    break;
-                case 'residente-screen':
-                    screenHTML = createFormHTML('residente-screen', 'Residente', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'numero', label: 'Número', type: 'tel' }
-                    ]);
-                    break;
-                case 'visita-screen':
-                    screenHTML = createFormHTML('visita-screen', 'Visita', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'numero', label: 'Número', type: 'tel' }
-                    ]);
-                    break;
-                case 'evento-screen':
-                    screenHTML = createFormHTML('evento-screen', 'Evento', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'numero', label: 'Número', type: 'tel' },
-                        { id: 'n_qr', label: 'N° QR', type: 'select' }
-                    ]);
-                    break;
-                case 'servicio-screen':
-                    screenHTML = createFormHTML('servicio-screen', 'Personal del servicio', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'numero', label: 'Número', type: 'tel' }
-                    ]);
-                    break;
-                case 'eliminar-qr-screen':
-                    screenHTML = createFormHTML('eliminar-qr-screen', 'Eliminar qr', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'nombre_qr', label: 'Nombre qr' }
-                    ]);
-                    break;
-                case 'incidencias-screen':
-                    screenHTML = createFormHTML('incidencias-screen', 'Incidencias', [
-                        { id: 'nombre', label: 'Nombre' }, { id: 'torre', label: 'Torre' },
-                        { id: 'departamento', label: 'Departamento' }, { id: 'incidencia', label: 'Incidencia' }
-                    ]);
-                    break;
-                default:
-                    screenHTML = menuScreenHTML;
-            }
-            contentArea.innerHTML = screenHTML;
-            addEventListenersToNewContent();
+        // 2. CUENTAS Y CONTRASEÑAS:
+        // Agrega aquí todos los usuarios y contraseñas que necesites.
+        // Formato: "nombre_de_usuario": "contraseña"
+        const users = {
+            "admin": "12345",
+            "usuario1": "clave_secreta",
+            "demo": "demo"
         };
 
-        const addEventListenersToNewContent = () => {
-            // Navegación del menú
-            const menuItems = contentArea.querySelectorAll('.menu-item');
-            menuItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const targetScreen = item.getAttribute('data-target');
-                    showScreen(targetScreen);
+
+        // ==================================================================
+        // LÓGICA DE LA APLICACIÓN (No es necesario editar abajo de esta línea)
+        // ==================================================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Lógica de Navegación ---
+            const screens = document.querySelectorAll('.screen');
+            window.showScreen = function(screenId) {
+                screens.forEach(screen => {
+                    screen.classList.remove('active');
                 });
-            });
-
-            // Formularios
-            const forms = contentArea.querySelectorAll('.data-form');
-            forms.forEach(form => {
-                form.addEventListener('submit', handleFormSubmit);
-            });
-        };
-
-        const handleFormSubmit = async (e) => {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            data.formType = form.dataset.formId.replace('-screen', ''); // Añadir tipo de formulario
-            
-            console.log('Enviando datos:', data);
-            showLoadingModal();
-            
-            try {
-                const response = await fetch(POWER_AUTOMATE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error HTTP: ${response.status}`);
+                const activeScreen = document.getElementById(screenId);
+                if (activeScreen) {
+                    activeScreen.classList.add('active');
                 }
-                
-                showConfirmationModal('¡Éxito!', 'Los datos se han guardado correctamente.', 'success');
-                form.reset();
+            };
+            
+            // --- Lógica de Login ---
+            const loginButton = document.getElementById('login-button');
+            loginButton.addEventListener('click', () => {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const errorMsg = document.getElementById('login-error');
 
-            } catch (error) {
-                console.error('Error al enviar a Power Automate:', error);
-                showConfirmationModal('Error', 'No se pudieron guardar los datos. Inténtalo de nuevo.', 'error');
+                if (users[username] && users[username] === password) {
+                    showScreen('menu-screen');
+                    errorMsg.classList.add('hidden');
+                } else {
+                    errorMsg.classList.remove('hidden');
+                }
+            });
+
+            // --- Lógica de Formularios ---
+            const saveButtons = document.querySelectorAll('.btn-save');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const form = event.target.closest('.form-page');
+                    const formId = form.dataset.formId;
+                    const inputs = form.querySelectorAll('input, select');
+                    
+                    const data = {
+                        formulario: formId
+                    };
+                    
+                    inputs.forEach(input => {
+                        data[input.dataset.field] = input.value;
+                    });
+                    
+                    console.log('Enviando datos:', data);
+
+                    // Simulación de envío a Power Automate
+                    if (POWER_AUTOMATE_URL === 'URL_DE_POWER_AUTOMATE_AQUI') {
+                         console.warn("ADVERTENCIA: La URL de Power Automate no ha sido configurada. Mostrando confirmación sin enviar datos.");
+                         showConfirmationPopup();
+                         return; // No continuar si la URL no está configurada
+                    }
+
+                    try {
+                        const response = await fetch(POWER_AUTOMATE_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+
+                        if (response.ok) {
+                            showConfirmationPopup();
+                            // Limpiar el formulario después de enviar
+                            inputs.forEach(input => input.value = '');
+                        } else {
+                            alert('Error al enviar los datos.');
+                        }
+                    } catch (error) {
+                        console.error('Error de red:', error);
+                        alert('Error de conexión. No se pudieron enviar los datos.');
+                    }
+                });
+            });
+
+            const newButtons = document.querySelectorAll('.btn-new');
+            newButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const form = event.target.closest('.form-page');
+                    const inputs = form.querySelectorAll('input, select');
+                    inputs.forEach(input => {
+                        if(input.tagName === 'SELECT') {
+                           input.selectedIndex = 0;
+                        } else {
+                           input.value = '';
+                        }
+                    });
+                });
+            });
+
+            // Lógica del Pop-up de confirmación
+            const popup = document.getElementById('confirmation-popup');
+            const okBtn = document.getElementById('popup-ok-btn');
+            
+            function showConfirmationPopup() {
+                popup.style.display = 'flex';
             }
-        };
 
-        const showLoadingModal = () => {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            modalLoading.classList.remove('hidden');
-            modalContent.classList.add('hidden');
-            modalCloseBtn.classList.add('hidden');
-        };
-
-        const showConfirmationModal = (title, message, type = 'success') => {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            modalLoading.classList.add('hidden');
-            modalContent.classList.remove('hidden');
-            modalCloseBtn.classList.remove('hidden');
-
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
-
-            // Cambiar color del icono y botón según el tipo
-            modalIcon.innerHTML = type === 'success' 
-                ? `<svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`
-                : `<svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>`;
-            modalIcon.className = `mx-auto flex items-center justify-center h-12 w-12 rounded-full ${type === 'success' ? 'bg-green-100' : 'bg-red-100'}`;
-            modalCloseBtn.className = `w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none sm:text-sm ${type === 'success' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}`;
-        };
-        
-        // --- INICIALIZACIÓN Y EVENT LISTENERS GLOBALES ---
-        
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Aquí iría la lógica de autenticación real
-            // Por ahora, solo simulamos un login exitoso
-            loginScreen.classList.remove('active');
-            mainAppContent.classList.remove('hidden');
-            showScreen('menu-screen');
-        });
-        
-        homeButtons.forEach(button => {
-            button.addEventListener('click', () => showScreen('menu-screen'));
+            okBtn.addEventListener('click', () => {
+                popup.style.display = 'none';
+                showScreen('menu-screen');
+            });
         });
 
-        modalCloseBtn.addEventListener('click', () => {
-             modal.classList.add('hidden');
-             modal.classList.remove('flex');
-        });
-    });
     </script>
 </body>
 </html>
