@@ -7,6 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Estilos personalizados para que coincida con el diseño */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
@@ -51,7 +55,7 @@
             text-align: center;
             color: white;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color: 0.3s;
         }
         .menu-item:hover {
             background-color: rgba(0, 0, 0, 0.4);
@@ -62,6 +66,7 @@
         }
         .form-container {
             padding: 1.5rem;
+            padding-bottom: 4rem; /* Espacio extra al final */
         }
         .form-title-section {
             background-color: #5a1a2e;
@@ -91,10 +96,6 @@
             text-align: center;
             cursor: pointer;
         }
-        .btn-new {
-            background-color: #3b82f6;
-            color: white;
-        }
         .btn-save {
             background-color: #16a34a;
             color: white;
@@ -103,7 +104,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <div id="app-container" class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
+    <div id="app-container" class="max-w-md mx-auto bg-white min-h-full shadow-lg">
 
         <!-- ============================================= -->
         <!-- PANTALLA DE INICIO DE SESIÓN (LOGIN)          -->
@@ -111,7 +112,7 @@
         <div id="login-screen" class="screen active">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                    <img src="logo.png" alt="Ravens Logo">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -141,7 +142,7 @@
         <div id="menu-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                    <img src="logo.png" alt="Ravens Logo">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -191,7 +192,7 @@
             <div id="residente-form" class="screen form-page" data-form-id="Residente">
                 <header class="header-app">
                     <div class="header-logo">
-                        <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                        <img src="logo.png" alt="Ravens Logo">
                         <span class="header-logo-text">RAVENS ACCESS</span>
                     </div>
                 </header>
@@ -221,7 +222,6 @@
                         </div>
                     </div>
                     <div class="form-buttons">
-                        <div class="btn btn-new">Nuevo</div>
                         <div class="btn btn-save">Guardar</div>
                     </div>
                 </div>
@@ -231,7 +231,7 @@
             <div id="visita-form" class="screen form-page" data-form-id="Visita">
                 <header class="header-app">
                     <div class="header-logo">
-                        <img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo">
+                        <img src="logo.png" alt="Ravens Logo">
                         <span class="header-logo-text">RAVENS ACCESS</span>
                     </div>
                 </header>
@@ -248,13 +248,13 @@
                         <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                         <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                     </div>
-                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                    <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
                 </div>
             </div>
 
             <!-- FORMULARIO: Evento -->
             <div id="evento-form" class="screen form-page" data-form-id="Evento">
-                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                     <div class="space-y-4">
@@ -264,13 +264,13 @@
                         <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                         <div><label class="block font-bold">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
                     </div>
-                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                    <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
                 </div>
             </div>
 
             <!-- FORMULARIO: Personal de servicio -->
             <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
-                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                      <div class="space-y-4">
@@ -279,13 +279,13 @@
                         <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                         <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                     </div>
-                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                    <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
                 </div>
             </div>
 
             <!-- FORMULARIO: Eliminar qr -->
             <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
-                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                     <div class="space-y-4">
@@ -294,13 +294,13 @@
                         <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                         <div><label class="block font-bold">Nombre qr</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                     </div>
-                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                    <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
                 </div>
             </div>
 
              <!-- FORMULARIO: Incidencias -->
              <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
-                <header class="header-app"><div class="header-logo"><img src="https://img.icons8.com/ios-filled/50/ffffff/crow.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+                <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
                 <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
                 <div class="form-container">
                      <div class="space-y-4">
@@ -309,7 +309,7 @@
                         <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                         <div><label class="block font-bold">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
                     </div>
-                    <div class="form-buttons"><div class="btn btn-new">Nuevo</div><div class="btn btn-save">Guardar</div></div>
+                    <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
                 </div>
             </div>
         </div>
@@ -390,9 +390,18 @@
                         formulario: formId
                     };
                     
+                    let allFieldsValid = true;
                     inputs.forEach(input => {
                         data[input.dataset.field] = input.value;
+                        if (!input.value) {
+                           allFieldsValid = false;
+                        }
                     });
+
+                    if (!allFieldsValid) {
+                        alert("Por favor, rellena todos los campos.");
+                        return;
+                    }
                     
                     console.log('Enviando datos:', data);
 
@@ -413,29 +422,20 @@
                         if (response.ok) {
                             showConfirmationPopup();
                             // Limpiar el formulario después de enviar
-                            inputs.forEach(input => input.value = '');
+                            inputs.forEach(input => {
+                                if(input.tagName === 'SELECT') {
+                                    input.selectedIndex = 0;
+                                } else {
+                                    input.value = '';
+                                }
+                            });
                         } else {
-                            alert('Error al enviar los datos.');
+                           alert('Error al enviar los datos. Código: ' + response.status);
                         }
                     } catch (error) {
                         console.error('Error de red:', error);
                         alert('Error de conexión. No se pudieron enviar los datos.');
                     }
-                });
-            });
-
-            const newButtons = document.querySelectorAll('.btn-new');
-            newButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const form = event.target.closest('.form-page');
-                    const inputs = form.querySelectorAll('input, select');
-                    inputs.forEach(input => {
-                        if(input.tagName === 'SELECT') {
-                           input.selectedIndex = 0;
-                        } else {
-                           input.value = '';
-                        }
-                    });
                 });
             });
 
@@ -456,4 +456,5 @@
     </script>
 </body>
 </html>
+
 
