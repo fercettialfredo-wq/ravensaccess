@@ -132,7 +132,7 @@
         <div id="login-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="ChatGPT Image 1 sept 2025, 12_06_06 p.m..png" alt="Ravens Logo" class="filter brightness-0 invert">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -146,6 +146,15 @@
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
                         <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <!-- Elemento "Recordarme" añadido -->
+                    <div class="flex items-center justify-start">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                Recordarme
+                            </label>
+                        </div>
                     </div>
                     <p id="login-error" class="text-red-500 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
                     <button id="login-button" class="w-full bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700">
@@ -162,7 +171,7 @@
         <div id="menu-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="ChatGPT Image 1 sept 2025, 12_06_06 p.m..png" alt="Ravens Logo" class="filter brightness-0 invert">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -208,7 +217,7 @@
         <div id="residente-form" class="screen form-page" data-form-id="Residente">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="ChatGPT Image 1 sept 2025, 12_06_06 p.m..png" alt="Ravens Logo" class="filter brightness-0 invert">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -247,7 +256,7 @@
         <div id="visita-form" class="screen form-page" data-form-id="Visita">
             <header class="header-app">
                 <div class="header-logo">
-                    <img src="ChatGPT Image 1 sept 2025, 12_06_06 p.m..png" alt="Ravens Logo" class="filter brightness-0 invert">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -367,6 +376,15 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const screens = document.querySelectorAll('.screen');
+            const usernameInput = document.getElementById('username');
+            const rememberMeCheckbox = document.getElementById('remember-me');
+
+            // --- Lógica para "Recordarme" ---
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                usernameInput.value = rememberedUser;
+                rememberMeCheckbox.checked = true;
+            }
 
             window.showScreen = function(screenId) {
                 screens.forEach(screen => {
@@ -381,11 +399,18 @@
             // --- Lógica de Login ---
             const loginButton = document.getElementById('login-button');
             loginButton.addEventListener('click', () => {
-                const username = document.getElementById('username').value;
+                const username = usernameInput.value;
                 const password = document.getElementById('password').value;
                 const errorMsg = document.getElementById('login-error');
 
                 if (users[username] && users[username] === password) {
+                    // Si la casilla "Recordarme" está marcada, guarda el usuario
+                    if (rememberMeCheckbox.checked) {
+                        localStorage.setItem('rememberedUser', username);
+                    } else {
+                        // Si no, elimina cualquier usuario guardado
+                        localStorage.removeItem('rememberedUser');
+                    }
                     showScreen('menu-screen');
                     errorMsg.classList.add('hidden');
                 } else {
