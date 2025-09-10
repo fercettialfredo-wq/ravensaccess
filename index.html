@@ -126,9 +126,6 @@
 
     <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg">
 
-        <!-- ============================================= -->
-        <!-- PANTALLA DE INICIO DE SESIÓN (LOGIN)          -->
-        <!-- ============================================= -->
         <div id="login-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
@@ -147,7 +144,6 @@
                         <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
                         <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                    <!-- Elemento "Recordarme" añadido -->
                     <div class="flex items-center justify-start">
                         <div class="flex items-center">
                             <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
@@ -165,9 +161,6 @@
         </div>
 
 
-        <!-- ============================================= -->
-        <!-- PANTALLA DEL MENÚ PRINCIPAL                   -->
-        <!-- ============================================= -->
         <div id="menu-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
@@ -176,32 +169,26 @@
                 </div>
             </header>
             <div class="main-menu-grid">
-                <!-- Residente -->
                 <div class="menu-item" onclick="showScreen('residente-form')">
                     <div class="menu-item-icon">👥</div>
                     <div>Residente</div>
                 </div>
-                <!-- Visita -->
                 <div class="menu-item" onclick="showScreen('visita-form')">
                     <div class="menu-item-icon">🤝</div>
                     <div>Visita</div>
                 </div>
-                <!-- Evento -->
                 <div class="menu-item" onclick="showScreen('evento-form')">
                     <div class="menu-item-icon">📅</div>
                     <div>Evento</div>
                 </div>
-                <!-- Personal de Servicio -->
                 <div class="menu-item" onclick="showScreen('servicio-form')">
                     <div class="menu-item-icon">👷</div>
                     <div>Personal de servicio</div>
                 </div>
-                 <!-- Eliminar QR -->
                  <div class="menu-item" onclick="showScreen('qr-form')">
                     <div class="menu-item-icon">🗑️</div>
                     <div>Eliminar QR</div>
                 </div>
-                <!-- Incidencias -->
                 <div class="menu-item" onclick="showScreen('incidencias-form')">
                     <div class="menu-item-icon">📱</div>
                     <div>Incidencias</div>
@@ -209,11 +196,6 @@
             </div>
         </div>
 
-        <!-- ============================================= -->
-        <!-- PANTALLAS DE FORMULARIOS                      -->
-        <!-- ============================================= -->
-        
-        <!-- FORMULARIO: Residente -->
         <div id="residente-form" class="screen form-page" data-form-id="Residente">
             <header class="header-app">
                 <div class="header-logo">
@@ -252,7 +234,6 @@
             </div>
         </div>
 
-        <!-- FORMULARIO: Visita -->
         <div id="visita-form" class="screen form-page" data-form-id="Visita">
             <header class="header-app">
                 <div class="header-logo">
@@ -277,7 +258,6 @@
             </div>
         </div>
 
-        <!-- FORMULARIO: Evento -->
         <div id="evento-form" class="screen form-page" data-form-id="Evento">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
@@ -293,7 +273,6 @@
             </div>
         </div>
 
-        <!-- FORMULARIO: Personal de servicio -->
         <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
@@ -308,7 +287,6 @@
             </div>
         </div>
 
-        <!-- FORMULARIO: Eliminar qr -->
         <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
@@ -323,7 +301,6 @@
             </div>
         </div>
 
-            <!-- FORMULARIO: Incidencias -->
             <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
@@ -338,7 +315,6 @@
             </div>
         </div>
 
-        <!-- Pop-up de confirmación -->
         <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
                 <h3 class="text-lg font-bold mb-4">¡Guardado!</h3>
@@ -356,17 +332,10 @@
 
         // 1. URL DE POWER AUTOMATE:
         // Pega aquí la URL HTTP POST que te da tu flujo de Power Automate.
-        const POWER_AUTOMATE_URL = 'URL_DE_POWER_AUTOMATE_AQUI';
+        const POWER_AUTOMATE_URL = 'https://default33ef64fbc32f430085f0106672ab0d.e9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/340a374eb06a4fe08a538f28da2c12fe/triggers/manual/paths/invoke/?api-version=1';
 
         // 2. CUENTAS Y CONTRASEÑAS:
-        // Agrega aquí todos los usuarios y contraseñas que necesites.
-        // Formato: "nombre_de_usuario": "contraseña"
-        const users = {
-            "admin": "12345",
-            "usuario1": "clave_secreta",
-            "demo": "demo",
-            "alfredofercetti@gmail.com": "12345"
-        };
+        // Ya no es necesario. El login se valida contra SharePoint vía Power Automate.
 
 
         // ==================================================================
@@ -399,31 +368,61 @@
                 }
             };
             
-            // --- Lógica de Login ---
+            // --- Lógica de Login (MODIFICADA PARA POWER AUTOMATE) ---
             const loginButton = document.getElementById('login-button');
-            loginButton.addEventListener('click', () => {
+            loginButton.addEventListener('click', async () => { // Se añade 'async'
                 const username = usernameInput.value;
                 const password = passwordInput.value;
                 const errorMsg = document.getElementById('login-error');
+                
+                // Deshabilita el botón para evitar múltiples clics
+                loginButton.disabled = true;
+                loginButton.textContent = 'Verificando...';
+                errorMsg.classList.add('hidden');
 
-                if (users[username] && users[username] === password) {
-                    // Si la casilla "Recordarme" está marcada, guarda usuario y contraseña
-                    if (rememberMeCheckbox.checked) {
-                        localStorage.setItem('rememberedUser', username);
-                        localStorage.setItem('rememberedPass', password);
+                try {
+                    const response = await fetch(POWER_AUTOMATE_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    });
+
+                    if (response.ok) { // response.ok es true para códigos 200-299
+                        // Si la casilla "Recordarme" está marcada, guarda usuario y contraseña
+                        if (rememberMeCheckbox.checked) {
+                            localStorage.setItem('rememberedUser', username);
+                            localStorage.setItem('rememberedPass', password);
+                        } else {
+                            // Si no, elimina cualquier dato guardado
+                            localStorage.removeItem('rememberedUser');
+                            localStorage.removeItem('rememberedPass');
+                        }
+                        showScreen('menu-screen');
+                        errorMsg.classList.add('hidden');
                     } else {
-                        // Si no, elimina cualquier dato guardado
-                        localStorage.removeItem('rememberedUser');
-                        localStorage.removeItem('rememberedPass');
+                        // Si la respuesta no es OK (ej. 401 Unauthorized), muestra el error.
+                        errorMsg.classList.remove('hidden');
                     }
-                    showScreen('menu-screen');
-                    errorMsg.classList.add('hidden');
-                } else {
+
+                } catch (error) {
+                    console.error('Error de conexión:', error);
+                    alert('No se pudo conectar con el servidor. Revisa tu conexión a internet.');
+                    errorMsg.textContent = 'Error de conexión.';
                     errorMsg.classList.remove('hidden');
+                } finally {
+                    // Vuelve a habilitar el botón
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Entrar';
                 }
             });
 
-            // --- Lógica de Formularios ---
+
+            // --- Lógica de Formularios (SIN CAMBIOS) ---
             const saveButtons = document.querySelectorAll('.btn-save');
             saveButtons.forEach(button => {
                 button.addEventListener('click', async (event) => {
@@ -450,19 +449,26 @@
                     
                     console.log('Enviando datos:', data);
 
-                    // Simulación de envío a Power Automate
+                    // Simulación de envío a Power Automate para formularios
                     if (POWER_AUTOMATE_URL === 'URL_DE_POWER_AUTOMATE_AQUI') {
-                         console.warn("ADVERTENCIA: La URL de Power Automate no ha sido configurada. Mostrando confirmación sin enviar datos.");
+                         console.warn("ADVERTENCIA: La URL de Power Automate no ha sido configurada para los formularios. Mostrando confirmación sin enviar datos.");
                          showConfirmationPopup();
                          return; // No continuar si la URL no está configurada
                     }
 
                     try {
-                        const response = await fetch(POWER_AUTOMATE_URL, {
+                        // NOTA: Este fetch es un ejemplo, necesitarás un flujo diferente para guardar los datos de los formularios.
+                        // Por ahora, solo muestra la confirmación. Para hacerlo funcional, crea otro flujo que reciba estos datos.
+                        /*
+                        const response = await fetch(URL_PARA_GUARDAR_FORMULARIOS, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(data)
                         });
+                        */
+                        
+                        // Simulación de éxito por ahora:
+                        const response = { ok: true }; 
 
                         if (response.ok) {
                             showConfirmationPopup();
@@ -475,7 +481,8 @@
                                 }
                             });
                         } else {
-                           alert('Error al enviar los datos. Código: ' + response.status);
+                           // alert('Error al enviar los datos. Código: ' + response.status);
+                           console.error('Error simulado al enviar datos.');
                         }
                     } catch (error) {
                         console.error('Error de red:', error);
@@ -504,4 +511,3 @@
     </script>
 </body>
 </html>
-
