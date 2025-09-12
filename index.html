@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ravens Access</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Estilos personalizados para que coincida con el diseño */
         html, body {
@@ -14,82 +15,161 @@
             padding: 0;
         }
         body {
+            /* Usamos una fuente más genérica si no cargamos Google Fonts explícitamente */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         #app-container {
-            min-height: 100vh; /* Asegura que ocupe al menos el 100% de la altura del viewport */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            /* El ancho máximo y centrado se aplica aquí si queremos que la app sea como una web */
+            /* Si es una app movil, ocupa todo el ancho */
+            /* max-width: 1200px; /* Ajusta según el ancho deseado del contenido principal */
+            /* margin-left: auto; */
+            /* margin-right: auto; */
         }
         .header-app {
-            background-color: #5a1a2e; /* Tono vino/rojo oscuro */
+            background-color: #000000; /* Fondo negro como groupravens.com */
             color: white;
             padding: 1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0; /* Evita que el header se encoja */
+            justify-content: space-between; /* Espacio entre logo/título y nav/redes */
+            flex-shrink: 0;
+            /* Centrar el contenido del header con un ancho máximo */
+            max-width: 1200px; /* Ajusta según sea necesario */
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
         }
         .header-logo {
             display: flex;
             align-items: center;
         }
         .header-logo img {
-            height: 40px;
+            height: 40px; /* Ajusta el tamaño del logo */
             margin-right: 10px;
+            /* filter: brightness(0) invert(1); */ /* Esto ya lo tienes para que el logo sea blanco, puede que necesites ajustarlo si el logo original ya es blanco */
         }
         .header-logo-text {
             font-weight: bold;
-            font-size: 1.25rem;
+            font-size: 1.5rem; /* Un poco más grande para el título */
+            color: white; /* Asegura el color blanco */
+            text-transform: uppercase; /* MAYÚSCULAS como en la página */
         }
+
+        /* Estilos para la navegación del header (si la implementas en tu app) */
+        .header-nav ul {
+            display: flex;
+            gap: 1.5rem; /* Espacio entre los elementos del menú */
+        }
+        .header-nav a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .header-nav a:hover {
+            color: #d90f48; /* O un rojo vino más claro para el hover */
+        }
+
+        /* Estilos para los iconos de redes sociales (si los implementas en tu app) */
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-left: 2rem; /* Separación del menú */
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem; /* Tamaño de los iconos */
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #d90f48; /* Color de hover */
+        }
+
         .screen {
-            display: none; /* Ocultar todas las pantallas por defecto */
-            flex-grow: 1; 
+            display: none;
+            flex-grow: 1;
             flex-direction: column;
         }
         .screen.active {
-            display: flex; /* Mostrar solo la pantalla activa */
+            display: flex;
         }
-        #menu-screen > .main-menu-grid {
-             flex-grow: 1; /* Hace que la grilla del menú ocupe todo el espacio sobrante */
+
+        /* Fondo y estilo para la sección principal (similar al banner de "CONÓCENOS!") */
+        .main-content-area {
+            flex-grow: 1; /* Para que ocupe el espacio restante */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centra el contenido verticalmente */
+            background-image: url('https://via.placeholder.com/1200x600/333333/FFFFFF?text=Imagen+de+fondo'); /* Placeholder, reemplaza con tu imagen */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            position: relative; /* Necesario para posicionar el botón de WhatsApp si lo pones aquí */
         }
+
+        .main-title-box {
+            background-color: #5a1a2e; /* Tono vino/rojo oscuro */
+            padding: 1.5rem 3rem;
+            border-radius: 0.5rem;
+            font-size: 3rem; /* Título grande */
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase; /* MAYÚSCULAS */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Sombra para que resalte */
+        }
+
+        /* Adaptación para los formularios - Fondo gris claro */
+        .form-container {
+            padding: 1.5rem;
+            background-color: #f7fafc; /* Gris muy claro, similar a la base de Tailwind */
+            border-radius: 0.5rem;
+            margin-top: 1rem; /* Espacio debajo del banner si se usa */
+            flex-grow: 1; /* Para que los formularios ocupen el espacio restante */
+            overflow-y: auto; /* Permite scroll si el formulario es largo */
+        }
+
+        /* El menú de la app */
         .main-menu-grid {
+            flex-grow: 1;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             padding: 1.5rem;
-            background-color: #5a1a2e;
+            background-color: #333333; /* Un gris oscuro para el fondo del menú */
+            color: white;
         }
+
         .menu-item {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: #5a1a2e; /* Tono vino para los items del menú */
             border-radius: 0.5rem;
             padding: 1rem;
             text-align: center;
             color: white;
             cursor: pointer;
-            transition: background-color: 0.3s;
+            transition: background-color 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
         }
         .menu-item:hover {
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: #d90f48; /* Color de hover más claro */
         }
         .menu-item-icon {
             font-size: 3rem;
             margin-bottom: 0.5rem;
         }
-        .form-page {
-            flex-grow: 1;
-        }
-        .form-container {
-            padding: 1.5rem;
-            padding-bottom: 4rem; /* Espacio extra al final */
-            overflow-y: auto; /* Permite scroll si el formulario es largo */
-        }
+
         .form-title-section {
-            background-color: #5a1a2e;
+            background-color: #5a1a2e; /* Fondo vino para los títulos de formulario */
             color: white;
             padding: 1rem 1.5rem;
             display: flex;
@@ -97,69 +177,85 @@
             align-items: center;
         }
         .form-title {
-            font-size: 1.5rem;
-            font-weight: 300;
+            font-size: 1.8rem; /* Ajuste de tamaño */
+            font-weight: bold; /* Hacerlo más bold */
         }
-        .home-icon {
-            cursor: pointer;
-        }
-        .form-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
+
+        /* Botones generales */
         .btn {
-            flex: 1;
-            padding: 0.75rem;
+            background-color: #d90f48; /* Rojo vino para los botones principales */
+            color: white;
+            padding: 0.75rem 1.5rem;
             border-radius: 0.375rem;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #a30b3d; /* Tono más oscuro al pasar el ratón */
         }
         .btn-save {
-            background-color: #16a34a;
+            background-color: #16a34a; /* Mantener verde para guardar si es una acción positiva */
             color: white;
+        }
+        .btn-save:hover {
+            background-color: #128a3f;
+        }
+
+        /* Inputs con borde negro, como se ve en el código que me diste para los formularios */
+        input[type="text"], input[type="password"], select {
+            border-color: #000000 !important; /* Asegura el borde negro */
+        }
+        
+        /* Estilos del popup de confirmación */
+        #confirmation-popup {
+            z-index: 1000; /* Asegura que esté por encima de todo */
         }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg">
-
+    <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg"> 
         <div id="login-screen" class="screen">
             <header class="header-app">
                 <div class="header-logo">
                     <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
-            </header>
-            <div class="form-container">
-                <h2 class="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
-                <div class="space-y-4">
-                    <div>
-                        <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
-                        <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                        <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div class="flex items-center justify-start">
-                        <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                                Recordarme
-                            </label>
+                </header>
+
+            <div class="main-content-area">
+                <div class="main-title-box">
+                    Bienvenido
+                </div>
+                <div class="form-container mt-8 w-11/12 max-w-sm bg-white rounded-lg shadow-xl p-6">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+                            <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-red-700 focus:border-red-700">
                         </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                            <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-red-700 focus:border-red-700">
+                        </div>
+                        <div class="flex items-center justify-start">
+                            <div class="flex items-center">
+                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                                    Recordarme
+                                </label>
+                            </div>
+                        </div>
+                        <p id="login-error" class="text-red-500 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
+                        <button id="login-button" class="w-full btn bg-red-700 hover:bg-red-800">
+                            Entrar
+                        </button>
                     </div>
-                    <p id="login-error" class="text-red-500 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
-                    <button id="login-button" class="w-full bg-green-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-green-700">
-                        Entrar
-                    </button>
                 </div>
             </div>
         </div>
-
 
         <div id="menu-screen" class="screen">
             <header class="header-app">
@@ -185,7 +281,7 @@
                     <div class="menu-item-icon">👷</div>
                     <div>Personal de servicio</div>
                 </div>
-                 <div class="menu-item" onclick="showScreen('qr-form')">
+                <div class="menu-item" onclick="showScreen('qr-form')">
                     <div class="menu-item-icon">🗑️</div>
                     <div>Eliminar QR</div>
                 </div>
@@ -205,27 +301,27 @@
             </header>
             <div class="form-title-section">
                 <h2 class="form-title">Residente</h2>
-                <div class="home-icon" onclick="showScreen('menu-screen')">
+                <div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
                 </div>
             </div>
             <div class="form-container">
                 <div class="space-y-4">
                     <div>
-                        <label class="block font-bold">Nombre</label>
-                        <input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        <label class="block font-bold text-gray-700">Nombre</label>
+                        <input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700">
                     </div>
                     <div>
-                        <label class="block font-bold">Torre</label>
-                        <input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        <label class="block font-bold text-gray-700">Torre</label>
+                        <input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700">
                     </div>
                     <div>
-                        <label class="block font-bold">Departamento</label>
-                        <input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        <label class="block font-bold text-gray-700">Departamento</label>
+                        <input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700">
                     </div>
                     <div>
-                        <label class="block font-bold">Número</label>
-                        <input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md">
+                        <label class="block font-bold text-gray-700">Número</label>
+                        <input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700">
                     </div>
                 </div>
                 <div class="form-buttons">
@@ -233,26 +329,16 @@
                 </div>
             </div>
         </div>
-
+        
         <div id="visita-form" class="screen form-page" data-form-id="Visita">
-            <header class="header-app">
-                <div class="header-logo">
-                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
-                    <span class="header-logo-text">RAVENS ACCESS</span>
-                </div>
-            </header>
-            <div class="form-title-section">
-                <h2 class="form-title">Visita</h2>
-                    <div class="home-icon" onclick="showScreen('menu-screen')">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
-                </div>
-            </div>
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Visita</h2><div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
-                    <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
                 </div>
                 <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
             </div>
@@ -260,14 +346,14 @@
 
         <div id="evento-form" class="screen form-page" data-form-id="Evento">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
-                    <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
                 </div>
                 <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
             </div>
@@ -275,13 +361,13 @@
 
         <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-title-section"><h2 class="form-title">Personal del servicio</h2><div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                     <div class="space-y-4">
-                    <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
                 </div>
                 <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
             </div>
@@ -289,37 +375,37 @@
 
         <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-title-section"><h2 class="form-title">Eliminar qr</h2><div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
-                    <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Nombre qr</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre qr</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
                 </div>
                 <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
             </div>
         </div>
 
-            <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
+        <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon text-white hover:text-red-300" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                     <div class="space-y-4">
-                    <div><label class="block font-bold">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
-                    <div><label class="block font-bold">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-black rounded-md"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
+                    <div><label class="block font-bold text-gray-700">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-black rounded-md focus:ring-red-700 focus:border-red-700"></div>
                 </div>
                 <div class="form-buttons"><div class="btn btn-save">Guardar</div></div>
             </div>
         </div>
 
-        <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
+        <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-                <h3 class="text-lg font-bold mb-4">¡Guardado!</h3>
-                <p>Los datos han sido enviados correctamente.</p>
-                <button id="popup-ok-btn" class="mt-6 bg-green-500 text-white px-4 py-2 rounded-md">OK</button>
+                <h3 class="text-lg font-bold mb-4 text-gray-800">¡Guardado!</h3>
+                <p class="text-gray-600">Los datos han sido enviados correctamente.</p>
+                <button id="popup-ok-btn" class="mt-6 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">OK</button>
             </div>
         </div>
 
@@ -329,21 +415,13 @@
         // ==================================================================
         // CONFIGURACIÓN
         // ==================================================================
-
-        // 1. URL DE POWER AUTOMATE:
-        // Pega aquí la URL HTTP POST que te da tu flujo de Power Automate.
         const POWER_AUTOMATE_URL = 'https://default33ef64fbc32f430085f0106672ab0d.e9.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/340a374eb06a4fe08a538f28da2c12fe/triggers/manual/paths/invoke/?api-version=1';
-
-        // 2. CUENTAS Y CONTRASEÑAS:
-        // Ya no es necesario. El login se valida contra SharePoint vía Power Automate.
-
 
         // ==================================================================
         // LÓGICA DE LA APLICACIÓN (No es necesario editar abajo de esta línea)
         // ==================================================================
         
         document.addEventListener('DOMContentLoaded', () => {
-
             const screens = document.querySelectorAll('.screen');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
@@ -370,12 +448,11 @@
             
             // --- Lógica de Login (MODIFICADA PARA POWER AUTOMATE) ---
             const loginButton = document.getElementById('login-button');
-            loginButton.addEventListener('click', async () => { // Se añade 'async'
+            loginButton.addEventListener('click', async () => {
                 const username = usernameInput.value;
                 const password = passwordInput.value;
                 const errorMsg = document.getElementById('login-error');
                 
-                // Deshabilita el botón para evitar múltiples clics
                 loginButton.disabled = true;
                 loginButton.textContent = 'Verificando...';
                 errorMsg.classList.add('hidden');
@@ -392,35 +469,29 @@
                         })
                     });
 
-                    if (response.ok) { // response.ok es true para códigos 200-299
-                        // Si la casilla "Recordarme" está marcada, guarda usuario y contraseña
+                    if (response.ok) {
                         if (rememberMeCheckbox.checked) {
                             localStorage.setItem('rememberedUser', username);
                             localStorage.setItem('rememberedPass', password);
                         } else {
-                            // Si no, elimina cualquier dato guardado
                             localStorage.removeItem('rememberedUser');
                             localStorage.removeItem('rememberedPass');
                         }
                         showScreen('menu-screen');
                         errorMsg.classList.add('hidden');
                     } else {
-                        // Si la respuesta no es OK (ej. 401 Unauthorized), muestra el error.
                         errorMsg.classList.remove('hidden');
                     }
-
                 } catch (error) {
                     console.error('Error de conexión:', error);
                     alert('No se pudo conectar con el servidor. Revisa tu conexión a internet.');
                     errorMsg.textContent = 'Error de conexión.';
                     errorMsg.classList.remove('hidden');
                 } finally {
-                    // Vuelve a habilitar el botón
                     loginButton.disabled = false;
                     loginButton.textContent = 'Entrar';
                 }
             });
-
 
             // --- Lógica de Formularios (SIN CAMBIOS) ---
             const saveButtons = document.querySelectorAll('.btn-save');
@@ -449,30 +520,19 @@
                     
                     console.log('Enviando datos:', data);
 
-                    // Simulación de envío a Power Automate para formularios
                     if (POWER_AUTOMATE_URL === 'URL_DE_POWER_AUTOMATE_AQUI') {
-                         console.warn("ADVERTENCIA: La URL de Power Automate no ha sido configurada para los formularios. Mostrando confirmación sin enviar datos.");
-                         showConfirmationPopup();
-                         return; // No continuar si la URL no está configurada
+                            console.warn("ADVERTENCIA: La URL de Power Automate no ha sido configurada para los formularios. Mostrando confirmación sin enviar datos.");
+                            showConfirmationPopup();
+                            return;
                     }
 
                     try {
-                        // NOTA: Este fetch es un ejemplo, necesitarás un flujo diferente para guardar los datos de los formularios.
-                        // Por ahora, solo muestra la confirmación. Para hacerlo funcional, crea otro flujo que reciba estos datos.
-                        /*
-                        const response = await fetch(URL_PARA_GUARDAR_FORMULARIOS, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data)
-                        });
-                        */
-                        
-                        // Simulación de éxito por ahora:
+                        // Aquí es donde deberías tener una URL diferente si Power Automate usa una para login y otra para los datos de los formularios.
+                        // Para este ejemplo, lo mantenemos con una simulación de éxito.
                         const response = { ok: true }; 
 
                         if (response.ok) {
                             showConfirmationPopup();
-                            // Limpiar el formulario después de enviar
                             inputs.forEach(input => {
                                 if(input.tagName === 'SELECT') {
                                     input.selectedIndex = 0;
@@ -481,8 +541,7 @@
                                 }
                             });
                         } else {
-                           // alert('Error al enviar los datos. Código: ' + response.status);
-                           console.error('Error simulado al enviar datos.');
+                            console.error('Error simulado al enviar datos.');
                         }
                     } catch (error) {
                         console.error('Error de red:', error);
@@ -505,10 +564,9 @@
             });
 
             // Show the initial screen
-             showScreen('login-screen');
+            showScreen('login-screen');
         });
 
     </script>
 </body>
 </html>
-
