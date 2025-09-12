@@ -40,20 +40,23 @@
         }
         .header-logo-text {
             font-weight: bold;
-            font-size: 1.75rem; /* <-- TAMAÑO AJUSTADO Y CORREGIDO */
+            font-size: 1.75rem;
             color: white;
             text-transform: uppercase;
         }
+        
+        /* --- LA CORRECCIÓN CLAVE ESTÁ AQUÍ --- */
         .screen {
-            display: none;
+            display: none; /* Oculta todas las pantallas por defecto */
             flex-grow: 1;
             flex-direction: column;
-            background-color: #f3f4f6; /* Fondo gris claro para todas las pantallas */
+            background-color: #f3f4f6;
         }
         .screen.active {
-            display: flex;
+            display: flex; /* Muestra SOLO la pantalla activa */
         }
-        /* Contenedor específico para la página de login */
+        /* --- FIN DE LA CORRECCIÓN --- */
+
         .login-page-container {
             flex-grow: 1;
             display: flex;
@@ -69,12 +72,12 @@
             background-color: #5a1a2e;
             padding: 1rem 2.5rem;
             border-radius: 0.5rem;
-            font-size: 1.5rem; /* Tamaño secundario */
+            font-size: 1.5rem;
             font-weight: bold;
             color: white;
             text-transform: uppercase;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            margin-bottom: 2rem; /* Espacio entre el título y el formulario */
+            margin-bottom: 2rem;
         }
         .password-container {
             position: relative;
@@ -110,20 +113,19 @@
             font-size: 1.1rem;
         }
         .menu-item:hover {
-            background-color: #4e1628; /* Tono más oscuro de vino */
+            background-color: #4e1628;
         }
         .menu-item-icon {
             font-size: 3rem;
             margin-bottom: 0.5rem;
         }
-        /* Estructura para que los formularios llenen la página */
         .form-page {
-            display: flex;
+            /* Ya no necesita display:flex aquí. Lo hereda de .screen.active */
             flex-direction: column;
             height: 100%;
         }
         .form-title-section {
-            background-color: #1f2937; /* Barra de título oscura */
+            background-color: #1f2937;
             color: white;
             padding: 1rem 1.5rem;
             display: flex;
@@ -137,8 +139,8 @@
         }
         .form-container {
             padding: 1.5rem;
-            flex-grow: 1; /* Hace que el contenedor del formulario ocupe el resto del espacio */
-            overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+            flex-grow: 1;
+            overflow-y: auto;
         }
         .btn-primary {
             background-color: #5a1a2e;
@@ -323,7 +325,7 @@
     </div>
 
     <script>
-        // El JavaScript no necesita cambios, funciona igual que en la versión anterior.
+        // El JavaScript no ha cambiado y sigue siendo funcional.
         const POWER_AUTOMATE_URL = 'URL_AQUI';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -397,13 +399,15 @@
             const okBtn = document.getElementById('popup-ok-btn');
             
             function showConfirmationPopup() {
-                popup.style.display = 'flex';
+                if(popup) popup.style.display = 'flex';
             }
 
-            okBtn.addEventListener('click', () => {
-                popup.style.display = 'none';
-                showScreen('menu-screen');
-            });
+            if(okBtn) {
+                okBtn.addEventListener('click', () => {
+                    if(popup) popup.style.display = 'none';
+                    showScreen('menu-screen');
+                });
+            }
         
             showScreen('login-screen');
         });
