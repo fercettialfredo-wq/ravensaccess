@@ -15,6 +15,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f3f4f6; /* Fondo base para el body */
         }
         #app-container {
             min-height: 100vh;
@@ -37,6 +38,7 @@
         .header-logo img {
             height: 40px;
             margin-right: 15px;
+            filter: brightness(0) invert(1); /* Asegura que el logo sea blanco si es oscuro */
         }
         .header-logo-text {
             font-weight: bold;
@@ -45,29 +47,33 @@
             text-transform: uppercase;
         }
         
-        /* --- LA CORRECCIÓN CLAVE ESTÁ AQUÍ --- */
         .screen {
-            display: none; /* Oculta todas las pantallas por defecto */
+            display: none;
             flex-grow: 1;
             flex-direction: column;
-            background-color: #f3f4f6;
+            background-color: #f3f4f6; /* Fondo gris claro por defecto para las pantallas */
         }
         .screen.active {
-            display: flex; /* Muestra SOLO la pantalla activa */
-        }
-        /* --- FIN DE LA CORRECCIÓN --- */
-
-        .login-page-container {
-            flex-grow: 1;
             display: flex;
+        }
+
+        /* ESTILO ESPECÍFICO PARA LA PANTALLA DE LOGIN */
+        #login-screen {
+            background-image: url('https://images.unsplash.com/photo-1544605911-37d40026e632?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'); /* NUEVO FONDO */
+            background-size: cover;
+            background-position: center;
+            display: flex; /* Asegura que la pantalla de login use este display */
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-image: url('https://images.unsplash.com/photo-1554034483-04fda0d3507b?auto=format&fit=crop&q=80&w=2070');
-            background-size: cover;
-            background-position: center;
             padding: 1rem;
         }
+
+        /* OCULTAR ENCABEZADO EN LA PANTALLA DE LOGIN */
+        #login-screen .header-app {
+            display: none;
+        }
+
         .main-title-box {
             background-color: #5a1a2e;
             padding: 1rem 2.5rem;
@@ -78,6 +84,8 @@
             text-transform: uppercase;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             margin-bottom: 2rem;
+            /* SUBE EL CONTROL DE ACCESO PARA SIMETRÍA CON EL LOGO */
+            margin-top: -15vh; /* Ajusta este valor según sea necesario para centrar visualmente */
         }
         .password-container {
             position: relative;
@@ -96,6 +104,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             padding: 1.5rem;
+            background-color: #f3f4f6; /* Asegura que el menú también tenga el fondo claro */
         }
         .menu-item {
             background-color: #5a1a2e;
@@ -120,9 +129,9 @@
             margin-bottom: 0.5rem;
         }
         .form-page {
-            /* Ya no necesita display:flex aquí. Lo hereda de .screen.active */
+            display: flex;
             flex-direction: column;
-            height: 100%;
+            height: 100%; /* Asegura que el formulario ocupe toda la altura */
         }
         .form-title-section {
             background-color: #1f2937;
@@ -136,11 +145,13 @@
         .form-title {
             font-size: 1.25rem;
             font-weight: bold;
+            /* Asegura que todos los títulos de formulario tengan el mismo tamaño */
         }
         .form-container {
             padding: 1.5rem;
             flex-grow: 1;
             overflow-y: auto;
+            background-color: #ffffff; /* Fondo blanco para los formularios */
         }
         .btn-primary {
             background-color: #5a1a2e;
@@ -166,6 +177,10 @@
         .btn-save:hover {
             background-color: #128a3f;
         }
+        input, select {
+            border-color: #cbd5e1 !important; /* light-gray */
+            color: #1f2937; /* dark-gray for text */
+        }
         input:focus, select:focus {
              --tw-ring-color: #5a1a2e !important;
              border-color: #5a1a2e !important;
@@ -173,46 +188,40 @@
         input[type="password"], input[type="text"]#password {
              padding-right: 2.5rem;
         }
+        /* Color del texto del input de login */
+        #login-screen input {
+            color: #1a202c !important; /* Casi negro para el texto del input */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
 
     <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg">
 
-        <div id="login-screen" class="screen">
-            <header class="header-app">
-                <div class="header-logo">
-                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
-                    <span class="header-logo-text">RAVENS ACCESS</span>
-                </div>
-            </header>
+        <div id="login-screen" class="screen active"> <div class="main-title-box">
+                Control de Acceso
+            </div>
 
-            <div class="login-page-container">
-                <div class="main-title-box">
-                    Control de Acceso
-                </div>
-
-                <div class="w-full max-w-sm bg-white rounded-lg shadow-xl p-6">
-                    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
-                            <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 text-gray-900">
-                        </div>
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-                            <div class="password-container">
-                                <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 text-gray-900">
-                                <i class="fas fa-eye" id="togglePassword"></i>
-                            </div>
-                        </div>
-                        <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
-                        </div>
-                        <p id="login-error" class="text-red-600 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
-                        <button id="login-button" class="w-full btn-primary">Entrar</button>
+            <div class="w-full max-w-sm bg-white rounded-lg shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+                        <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">
                     </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <div class="password-container">
+                            <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
+                    </div>
+                    <p id="login-error" class="text-red-600 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
+                    <button id="login-button" class="w-full btn-primary">Entrar</button>
                 </div>
             </div>
         </div>
@@ -320,12 +329,16 @@
         </div>
         
         <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">¡Guardado!</h3>
+                <p class="text-gray-600">Los datos han sido enviados correctamente.</p>
+                <button id="popup-ok-btn" class="mt-6 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">OK</button>
             </div>
+        </div>
 
     </div>
 
     <script>
-        // El JavaScript no ha cambiado y sigue siendo funcional.
         const POWER_AUTOMATE_URL = 'URL_AQUI';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -376,10 +389,26 @@
 
                 try {
                     console.log('Intentando validar con Power Automate...');
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Aquí deberías realizar la llamada real a tu Power Automate
+                    // const response = await fetch(POWER_AUTOMATE_URL, {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify({ username, password })
+                    // });
+                    // if (!response.ok) throw new Error('Credenciales inválidas');
+                    // const data = await response.json();
+                    // if (data.success) {
+                    //     showScreen('menu-screen');
+                    // } else {
+                    //     throw new Error('Credenciales inválidas');
+                    // }
+
+                    // Simulación de fallo para cualquier otro usuario, si no hay Power Automate configurado
+                    await new Promise(resolve => setTimeout(resolve, 1000)); // Simula espera de red
                     throw new Error("Validación fallida");
 
                 } catch (error) {
+                    console.error('Error de validación:', error);
                     errorMsg.classList.remove('hidden');
                 } finally {
                     loginButton.disabled = false;
@@ -390,7 +419,32 @@
             const saveButtons = document.querySelectorAll('.btn-save');
             saveButtons.forEach(button => {
                 button.addEventListener('click', async (event) => {
-                    console.log("Botón de guardar presionado.");
+                    const formPage = event.target.closest('.form-page');
+                    const formId = formPage.dataset.formId;
+                    const inputs = formPage.querySelectorAll('input[data-field], select[data-field]');
+                    const data = { FormType: formId };
+                    inputs.forEach(input => {
+                        data[input.dataset.field] = input.value;
+                    });
+
+                    console.log("Datos a enviar:", data);
+                    
+                    // Aquí iría tu fetch real a Power Automate para guardar los datos
+                    // try {
+                    //     const response = await fetch(POWER_AUTOMATE_URL, {
+                    //         method: 'POST',
+                    //         headers: { 'Content-Type': 'application/json' },
+                    //         body: JSON.stringify(data)
+                    //     });
+                    //     if (!response.ok) throw new Error('Error al guardar los datos');
+                    //     showConfirmationPopup();
+                    // } catch (error) {
+                    //     console.error("Error al enviar datos:", error);
+                    //     alert("Hubo un error al guardar los datos.");
+                    // }
+
+                    // Simulación de éxito de guardado
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     showConfirmationPopup();
                 });
             });
@@ -409,7 +463,8 @@
                 });
             }
         
-            showScreen('login-screen');
+            // Inicialmente, se muestra la pantalla de login.
+            // showScreen('login-screen');  // Ya está activa por defecto en el HTML
         });
     </script>
 </body>
