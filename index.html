@@ -9,9 +9,9 @@
     <style>
         html, body {
             height: 100%;
-            overflow-x: hidden;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -35,12 +35,12 @@
             align-items: center;
         }
         .header-logo img {
-            height: 45px; /* Un poco más grande */
+            height: 40px;
             margin-right: 15px;
         }
         .header-logo-text {
             font-weight: bold;
-            font-size: 2.25rem; /* <-- TAMAÑO AUMENTADO SIGNIFICATIVAMENTE */
+            font-size: 1.75rem; /* <-- TAMAÑO AJUSTADO Y CORREGIDO */
             color: white;
             text-transform: uppercase;
         }
@@ -48,40 +48,33 @@
             display: none;
             flex-grow: 1;
             flex-direction: column;
+            background-color: #f3f4f6; /* Fondo gris claro para todas las pantallas */
         }
         .screen.active {
             display: flex;
         }
-        .main-content-area {
+        /* Contenedor específico para la página de login */
+        .login-page-container {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-image: url('https://images.unsplash.com/photo-1614149293347-0863745f4937?auto=format&fit=crop&q=80&w=2070'); /* Fondo más oscuro y neutro */
+            background-image: url('https://images.unsplash.com/photo-1554034483-04fda0d3507b?auto=format&fit=crop&q=80&w=2070');
             background-size: cover;
             background-position: center;
-            color: white;
-            text-align: center;
-            padding: 2rem;
+            padding: 1rem;
         }
         .main-title-box {
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente para legibilidad */
-            border: 2px solid #5a1a2e;
+            background-color: #5a1a2e;
             padding: 1rem 2.5rem;
             border-radius: 0.5rem;
-            font-size: 2rem; /* <-- TAMAÑO REDUCIDO */
+            font-size: 1.5rem; /* Tamaño secundario */
             font-weight: bold;
             color: white;
             text-transform: uppercase;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .form-container {
-            padding: 1.5rem;
-            background-color: #ffffff; /* Fondo blanco para el formulario */
-            border-radius: 0.5rem;
-            flex-grow: 1;
-            overflow-y: auto;
+            margin-bottom: 2rem; /* Espacio entre el título y el formulario */
         }
         .password-container {
             position: relative;
@@ -100,42 +93,53 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             padding: 1.5rem;
-            background-color: #f3f4f6; /* Fondo gris claro para el menú */
         }
         .menu-item {
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
+            background-color: #5a1a2e;
             border-radius: 0.5rem;
             padding: 1rem;
             text-align: center;
-            color: #1f2937; /* Texto oscuro */
+            color: white;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.1rem;
         }
         .menu-item:hover {
-            border-color: #5a1a2e;
-            color: #5a1a2e;
-            transform: translateY(-2px); /* Efecto sutil de elevación */
+            background-color: #4e1628; /* Tono más oscuro de vino */
         }
         .menu-item-icon {
             font-size: 3rem;
             margin-bottom: 0.5rem;
-            color: #5a1a2e; /* Íconos con el color de la marca */
+        }
+        /* Estructura para que los formularios llenen la página */
+        .form-page {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .form-title-section {
-            background-color: #111827; /* Gris oscuro/casi negro */
+            background-color: #1f2937; /* Barra de título oscura */
             color: white;
             padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
         .form-title {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: bold;
         }
-        /* Botón primario con color de marca */
+        .form-container {
+            padding: 1.5rem;
+            flex-grow: 1; /* Hace que el contenedor del formulario ocupe el resto del espacio */
+            overflow-y: auto; /* Permite scroll si el contenido es muy largo */
+        }
         .btn-primary {
             background-color: #5a1a2e;
             color: white;
@@ -147,20 +151,21 @@
             transition: background-color 0.2s ease;
         }
         .btn-primary:hover {
-            background-color: #4e1628; /* Tono más oscuro al pasar el ratón */
+            background-color: #4e1628;
         }
         .btn-save {
             background-color: #16a34a;
             color: white;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
         }
         .btn-save:hover {
             background-color: #128a3f;
         }
-        input, select {
-            border-color: #9ca3af !important; /* Borde gris estándar */
-        }
         input:focus, select:focus {
-             --tw-ring-color: #5a1a2e !important; /* Color vino al hacer foco */
+             --tw-ring-color: #5a1a2e !important;
              border-color: #5a1a2e !important;
         }
         input[type="password"], input[type="text"]#password {
@@ -180,30 +185,28 @@
                 </div>
             </header>
 
-            <div class="main-content-area">
+            <div class="login-page-container">
                 <div class="main-title-box">
                     Control de Acceso
                 </div>
 
-                <div class="form-container mt-8 w-11/12 max-w-sm bg-white rounded-lg shadow-xl p-6">
+                <div class="w-full max-w-sm bg-white rounded-lg shadow-xl p-6">
                     <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
                     <div class="space-y-4">
                         <div>
                             <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
-                            <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2">
+                            <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 text-gray-900">
                         </div>
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
                             <div class="password-container">
-                                <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2">
+                                <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 text-gray-900">
                                 <i class="fas fa-eye" id="togglePassword"></i>
                             </div>
                         </div>
-                        <div class="flex items-center justify-start">
-                            <div class="flex items-center">
-                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
-                                <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
-                            </div>
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
                         </div>
                         <p id="login-error" class="text-red-600 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
                         <button id="login-button" class="w-full btn-primary">Entrar</button>
@@ -232,100 +235,95 @@
         <div id="residente-form" class="screen form-page" data-form-id="Residente">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Residente</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
 
         <div id="visita-form" class="screen form-page" data-form-id="Visita">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Visita</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
 
         <div id="evento-form" class="screen form-page" data-form-id="Evento">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
 
         <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Personal de Servicio</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
 
         <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Eliminar QR</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Nombre QR</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre QR</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
 
         <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
             <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container">
+            <div class="form-container bg-white">
                 <div class="space-y-4">
-                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
-                    <div><label class="block font-bold text-gray-700">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
                 </div>
-                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md font-bold cursor-pointer">Guardar</div></div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
             </div>
         </div>
-
+        
         <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-                <h3 class="text-lg font-bold mb-4 text-gray-800">¡Guardado!</h3>
-                <p class="text-gray-600">Los datos han sido enviados correctamente.</p>
-                <button id="popup-ok-btn" class="mt-6 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">OK</button>
             </div>
-        </div>
 
     </div>
 
     <script>
-        // ... (El JavaScript no necesita cambios, funciona igual que en la versión anterior)
+        // El JavaScript no necesita cambios, funciona igual que en la versión anterior.
         const POWER_AUTOMATE_URL = 'URL_AQUI';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -362,7 +360,6 @@
                 errorMsg.classList.add('hidden');
 
                 if (username === 'alfredofercetti' && password === '12345') {
-                    console.log('Acceso de desarrollador concedido.');
                     if (rememberMeCheckbox.checked) {
                         localStorage.setItem('rememberedUser', username);
                     } else {
@@ -381,7 +378,6 @@
                     throw new Error("Validación fallida");
 
                 } catch (error) {
-                    console.error('Error de validación:', error);
                     errorMsg.classList.remove('hidden');
                 } finally {
                     loginButton.disabled = false;
@@ -389,11 +385,9 @@
                 }
             });
 
-            // Lógica de Formularios (adaptada para el nuevo botón)
             const saveButtons = document.querySelectorAll('.btn-save');
             saveButtons.forEach(button => {
                 button.addEventListener('click', async (event) => {
-                    // ... (la lógica interna de guardar no cambia)
                     console.log("Botón de guardar presionado.");
                     showConfirmationPopup();
                 });
