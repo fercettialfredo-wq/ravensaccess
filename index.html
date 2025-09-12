@@ -15,12 +15,13 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f3f4f6;
+            background-color: #000000; /* Fondo negro base */
         }
         #app-container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background-color: #000000;
         }
         .header-app {
             background-color: #000000;
@@ -47,22 +48,39 @@
         }
         
         .screen {
-            display: none; /* Oculta todas las pantallas por defecto */
+            display: none;
             flex-grow: 1;
             flex-direction: column;
         }
         .screen.active {
-            display: flex; /* Muestra SOLO la pantalla activa */
+            display: flex;
         }
 
         #login-screen {
-            background-image: url('https://images.unsplash.com/photo-1544605911-37d40026e632?auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
+            background-color: #000000;
             align-items: center;
             justify-content: center;
             padding: 1rem;
         }
+
+        .login-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            margin-top: -10vh; /* Sube todo el bloque del login */
+        }
+        .login-header img {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        .login-header-text {
+            font-weight: bold;
+            font-size: 2.25rem;
+            color: white;
+            text-transform: uppercase;
+        }
+
         .main-title-box {
             background-color: #5a1a2e;
             padding: 1rem 2.5rem;
@@ -72,8 +90,8 @@
             color: white;
             text-transform: uppercase;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin-top: 1.5rem; /* Espacio después del título principal */
             margin-bottom: 2rem;
-            margin-top: -15vh;
         }
         .password-container {
             position: relative;
@@ -92,6 +110,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
             padding: 1.5rem;
+            background-color: #000000; /* Fondo negro para el menú */
         }
         .menu-item {
             background-color: #5a1a2e;
@@ -175,11 +194,17 @@
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
 
     <div id="app-container" class="max-w-md mx-auto bg-white shadow-lg">
 
         <div id="login-screen" class="screen active">
+            
+            <div class="login-header">
+                <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
+                <h1 class="login-header-text">Ravens Access</h1>
+            </div>
+
             <div class="main-title-box">
                 Control de Acceso
             </div>
@@ -211,7 +236,7 @@
         <div id="menu-screen" class="screen">
              <header class="header-app">
                 <div class="header-logo">
-                    <img src="logo.png" alt="Ravens Logo">
+                    <img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert">
                     <span class="header-logo-text">RAVENS ACCESS</span>
                 </div>
             </header>
@@ -226,7 +251,7 @@
         </div>
         
         <div id="residente-form" class="screen form-page" data-form-id="Residente">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Residente</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -239,10 +264,88 @@
             </div>
         </div>
 
+        <div id="visita-form" class="screen form-page" data-form-id="Visita">
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Visita</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container">
+                <div class="space-y-4">
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                </div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
+            </div>
         </div>
 
+        <div id="evento-form" class="screen form-page" data-form-id="Evento">
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container">
+                <div class="space-y-4">
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">N QR</label><select data-field="N_QR" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
+                </div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
+            </div>
+        </div>
+
+        <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Personal de Servicio</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container">
+                <div class="space-y-4">
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Número</label><input type="text" data-field="Numero" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                </div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
+            </div>
+        </div>
+
+        <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Eliminar QR</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container">
+                <div class="space-y-4">
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Nombre QR</label><input type="text" data-field="Nombre_QR" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                </div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
+            </div>
+        </div>
+
+        <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
+            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container">
+                <div class="space-y-4">
+                    <div><label class="block font-bold text-gray-700">Nombre</label><input type="text" data-field="Nombre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Torre</label><input type="text" data-field="Torre" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Departamento</label><input type="text" data-field="Departamento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                    <div><label class="block font-bold text-gray-700">Incidencia</label><input type="text" data-field="Incidencia" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2"></div>
+                </div>
+                <div class="mt-8"><div class="btn-save w-full text-center py-3 rounded-md">Guardar</div></div>
+            </div>
+        </div>
+        
+        <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                <h3 class="text-lg font-bold mb-4 text-gray-800">¡Guardado!</h3>
+                <p class="text-gray-600">Los datos han sido enviados correctamente.</p>
+                <button id="popup-ok-btn" class="mt-6 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">OK</button>
+            </div>
+        </div>
+
+    </div>
+
     <script>
-        // El JavaScript no necesita cambios, funciona correctamente.
         const POWER_AUTOMATE_URL = 'URL_AQUI';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -301,6 +404,25 @@
                     loginButton.textContent = 'Entrar';
                 }
             });
+
+            const saveButtons = document.querySelectorAll('.btn-save');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', () => showConfirmationPopup());
+            });
+
+            const popup = document.getElementById('confirmation-popup');
+            const okBtn = document.getElementById('popup-ok-btn');
+            
+            function showConfirmationPopup() {
+                if(popup) popup.style.display = 'flex';
+            }
+
+            if(okBtn) {
+                okBtn.addEventListener('click', () => {
+                    if(popup) popup.style.display = 'none';
+                    showScreen('menu-screen');
+                });
+            }
         });
     </script>
 </body>
