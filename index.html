@@ -172,11 +172,7 @@
 
     <script>
         // --- CONFIGURACIÓN ---
-        // Para pruebas locales, usa la URL que te da la terminal de VS Code.
-        const AZURE_FUNCTION_URL = 'http://localhost:7071/api/processFormData';
-
-        // Cuando publiques tu función en Azure, reemplaza la URL de arriba con la de producción.
-        // const AZURE_FUNCTION_URL = 'URL_DE_PRODUCCION_DE_TU_AZURE_FUNCTION';
+        const AZURE_FUNCTION_URL = 'https://appvalidar.azurewebsites.net/api/processFormData?code=_vcUWERRYUekBkUou3jS66oEmE25eB8YwHpVzWYLg48pAzFuNTLQJA==';
 
         document.addEventListener('DOMContentLoaded', () => {
             let currentUser = {}; 
@@ -316,4 +312,3 @@
     </script>
 </body>
 </html>
-
