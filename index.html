@@ -210,6 +210,20 @@
                 errorMsg.textContent = "Usuario o contraseña incorrectos.";
                 errorMsg.classList.add('hidden');
                 
+                // --- MODO DEMOSTRACIÓN ---
+                if (username.toLowerCase() === 'alfredofercetti' && password === '12345') {
+                    console.log('Acceso de demostración concedido.');
+                    currentUser = { username: username, condominio: 'Condominio de Demostración' };
+                    if (rememberMeCheckbox.checked) {
+                        localStorage.setItem('rememberedUser', username);
+                    } else {
+                        localStorage.removeItem('rememberedUser');
+                    }
+                    showScreen('menu-screen');
+                    return; // Detiene la ejecución para no llamar a Azure
+                }
+
+                // --- Lógica de validación real ---
                 loginButton.disabled = true;
                 loginButton.textContent = 'Verificando...';
 
