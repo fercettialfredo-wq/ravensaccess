@@ -66,7 +66,7 @@
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
                         <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
                     </div>
-                    <p id="login-error" class="text-red-600 text-sm text-center hidden">Usuario o contraseña incorrectos.</p>
+                    <p id="login-error" class="text-red-600 text-sm text-center hidden">Credenciales inválidas</p>
                     <button id="login-button" class="w-full btn-primary">Entrar</button>
                 </div>
             </div>
@@ -172,7 +172,7 @@
 
     <script>
         // --- CONFIGURACIÓN ---
-        const AZURE_FUNCTION_URL = 'https://appvalidar.azurewebsites.net/api/processFormData?code=_vcUWERRYUekBkUou3jS66oEmE25eB8YwHpVzWYLg48pAzFuNTLQJA==';
+        const AZURE_FUNCTION_URL = 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ==';
 
         document.addEventListener('DOMContentLoaded', () => {
             let currentUser = {}; 
@@ -183,6 +183,7 @@
             const rememberMeCheckbox = document.getElementById('remember-me');
             const loginButton = document.getElementById('login-button');
             const togglePassword = document.getElementById('togglePassword');
+            const loginError = document.getElementById('login-error');
             
             togglePassword.addEventListener('click', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -206,11 +207,9 @@
             loginButton.addEventListener('click', async () => {
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value;
-                const errorMsg = document.getElementById('login-error');
-                errorMsg.textContent = "Usuario o contraseña incorrectos.";
-                errorMsg.classList.add('hidden');
                 
-                // --- Lógica de validación real ---
+                loginError.classList.add('hidden');
+                
                 loginButton.disabled = true;
                 loginButton.textContent = 'Verificando...';
 
@@ -236,8 +235,8 @@
                     showScreen('menu-screen');
 
                 } catch (error) {
-                    errorMsg.textContent = error.message;
-                    errorMsg.classList.remove('hidden');
+                    loginError.textContent = error.message;
+                    loginError.classList.remove('hidden');
                 } finally {
                     loginButton.disabled = false;
                     loginButton.textContent = 'Entrar';
@@ -313,3 +312,4 @@
     </script>
 </body>
 </html>
+
