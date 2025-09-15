@@ -66,7 +66,7 @@
                         <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: #5a1a2e;">
                         <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
                     </div>
-                    <p id="login-error" class="text-red-600 text-sm text-center hidden">Credenciales inválidas</p>
+                    <p id="login-error" class="text-red-600 text-sm text-center hidden"></p>
                     <button id="login-button" class="w-full btn-primary">Entrar</button>
                 </div>
             </div>
@@ -172,7 +172,7 @@
 
     <script>
         // --- CONFIGURACIÓN ---
-        const AZURE_FUNCTION_URL = 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ==';
+        const AZURE_FUNCTION_URL = 'https://appvalidar.azurewebsites.net/api/processFormData?code=PEGA_AQUI_TU_NUEVA_CLAVE_DE_FUNCION';
 
         document.addEventListener('DOMContentLoaded', () => {
             let currentUser = {}; 
@@ -220,9 +220,19 @@
                         body: JSON.stringify({ username, password })
                     });
                     
+                    if (!response.ok) {
+                        let errorMessage = `Error del servidor: ${response.status}`;
+                        try {
+                            const errorData = await response.json();
+                            errorMessage = errorData.message || errorMessage;
+                        } catch (e) {
+                            // La respuesta de error no era JSON, nos quedamos con el mensaje genérico.
+                        }
+                        throw new Error(errorMessage);
+                    }
+                    
                     const data = await response.json();
-
-                    if (!response.ok || !data.success) {
+                    if (!data.success) {
                         throw new Error(data.message || 'Credenciales inválidas');
                     }
                     
@@ -312,5 +322,3 @@
     </script>
 </body>
 </html>
-
-
