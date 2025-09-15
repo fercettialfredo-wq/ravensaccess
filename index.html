@@ -26,7 +26,7 @@
         .main-menu-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1.5rem; background-color: #000000; }
         .menu-item { background-color: #5a1a2e; border-radius: 0.5rem; padding: 1rem; text-align: center; color: white; cursor: pointer; transition: background-color 0.3s; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1rem; }
         .menu-item:hover { background-color: #4e1628; }
-        .menu-item-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .menu-item-icon { height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; }
         .form-page { flex-direction: column; height: 100%; }
         .form-title-section { background-color: #1f2937; color: white; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         .form-title { font-size: 1.25rem; font-weight: bold; }
@@ -38,13 +38,18 @@
         input, select { border-color: #cbd5e1 !important; color: #1f2937 !important; }
         input:focus, select:focus { --tw-ring-color: #5a1a2e !important; border-color: #5a1a2e !important; }
         input[type="password"] { padding-right: 2.5rem; }
+        .icon-image {
+            width: 48px;
+            height: 48px;
+            filter: brightness(0) invert(1);
+        }
     </style>
 </head>
 <body>
     <div id="app-container" class="max-w-md mx-auto shadow-lg">
         <div id="login-screen" class="screen active">
             <div class="login-header">
-                <img src="logo.png" alt="Ravens Logo">
+                <img src="icons/logo.png" alt="Ravens Logo">
                 <h1 class="login-header-text">Ravens Access</h1>
             </div>
             <div class="main-title-box"> Control de Acceso </div>
@@ -72,18 +77,18 @@
             </div>
         </div>
         <div id="menu-screen" class="screen">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="main-menu-grid">
-                <div class="menu-item" onclick="showScreen('residente-form')"><div class="menu-item-icon">👥</div><div>Residente</div></div>
-                <div class="menu-item" onclick="showScreen('visita-form')"><div class="menu-item-icon">🤝</div><div>Visita</div></div>
-                <div class="menu-item" onclick="showScreen('evento-form')"><div class="menu-item-icon">📅</div><div>Evento</div></div>
-                <div class="menu-item" onclick="showScreen('servicio-form')"><div class="menu-item-icon">👷</div><div>Personal de servicio</div></div>
-                <div class="menu-item" onclick="showScreen('qr-form')"><div class="menu-item-icon">🗑️</div><div>Eliminar QR</div></div>
-                <div class="menu-item" onclick="showScreen('incidencias-form')"><div class="menu-item-icon">📱</div><div>Incidencias</div></div>
+                <div class="menu-item" onclick="showScreen('residente-form')"><div class="menu-item-icon"><img src="icons/residente.svg" alt="Residente" class="icon-image"></div><div>Residente</div></div>
+                <div class="menu-item" onclick="showScreen('visita-form')"><div class="menu-item-icon"><img src="icons/visita.svg" alt="Visita" class="icon-image"></div><div>Visita</div></div>
+                <div class="menu-item" onclick="showScreen('evento-form')"><div class="menu-item-icon"><img src="icons/evento.svg" alt="Evento" class="icon-image"></div><div>Evento</div></div>
+                <div class="menu-item" onclick="showScreen('servicio-form')"><div class="menu-item-icon"><img src="icons/servicio.svg" alt="Servicio" class="icon-image"></div><div>Personal de servicio</div></div>
+                <div class="menu-item" onclick="showScreen('qr-form')"><div class="menu-item-icon"><img src="icons/qr.svg" alt="QR" class="icon-image"></div><div>Eliminar QR</div></div>
+                <div class="menu-item" onclick="showScreen('incidencias-form')"><div class="menu-item-icon"><img src="icons/incidencias.svg" alt="Incidencia" class="icon-image"></div><div>Incidencias</div></div>
             </div>
         </div>
         <div id="residente-form" class="screen form-page" data-form-id="Residente">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Residente</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -96,7 +101,7 @@
             </div>
         </div>
         <div id="visita-form" class="screen form-page" data-form-id="Visita">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Visita</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -109,7 +114,7 @@
             </div>
         </div>
         <div id="evento-form" class="screen form-page" data-form-id="Evento">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Evento</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -123,7 +128,7 @@
             </div>
         </div>
         <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Personal de Servicio</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -136,7 +141,7 @@
             </div>
         </div>
         <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Eliminar QR</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -149,7 +154,7 @@
             </div>
         </div>
         <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
-            <header class="header-app"><div class="header-logo"><img src="logo.png" alt="Ravens Logo" class="filter brightness-0 invert"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">Incidencias</h2><div class="home-icon cursor-pointer" onclick="showScreen('menu-screen')"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
             <div class="form-container">
                 <div class="space-y-4">
@@ -309,4 +314,3 @@
     </script>
 </body>
 </html>
-
