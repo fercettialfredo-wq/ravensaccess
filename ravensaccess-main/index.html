@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ravens Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container" class="max-w-md mx-auto shadow-lg">
+        
+        <main id="login-screen" class="screen active">
+            <div class="login-header">
+                <img src="icons/logo.png" alt="Ravens Logo">
+                <h1 class="login-header-text">Ravens Access</h1>
+            </div>
+            <div class="main-title-box"> Control de Acceso </div>
+            <div class="w-full max-w-sm bg-white rounded-lg shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h2>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Usuario</label>
+                        <input type="text" id="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <div class="password-container">
+                            <input type="password" id="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">Recordarme</label>
+                    </div>
+                    <p id="login-error" class="text-red-600 text-sm text-center hidden"></p>
+                    <button id="login-button" type="submit" class="w-full btn-primary">Entrar</button>
+                </form>
+            </div>
+        </main>
+
+        <div id="menu-screen" class="screen">
+            <header class="header-app"><div class="header-logo"><img src="icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
+            <main class="main-menu-grid">
+                <div class="menu-item" data-screen="residente-form"><div class="menu-item-icon"><img src="icons/residente.svg" alt="" class="icon-image"></div><div>Residente</div></div>
+                <div class="menu-item" data-screen="visita-form"><div class="menu-item-icon"><img src="icons/visita.svg" alt="" class="icon-image"></div><div>Visita</div></div>
+                <div class="menu-item" data-screen="evento-form"><div class="menu-item-icon"><img src="icons/evento.svg" alt="" class="icon-image"></div><div>Evento</div></div>
+                <div class="menu-item" data-screen="servicio-form"><div class="menu-item-icon"><img src="icons/servicio.svg" alt="" class="icon-image"></div><div>Personal de servicio</div></div>
+                <div class="menu-item" data-screen="qr-form"><div class="menu-item-icon"><img src="icons/qr.svg" alt="" class="icon-image"></div><div>Eliminar QR</div></div>
+                <div class="menu-item" data-screen="incidencias-form"><div class="menu-item-icon"><img src="icons/incidencias.svg" alt="" class="icon-image"></div><div>Incidencias</div></div>
+            </main>
+        </div>
+
+        <div id="residente-form" class="screen form-page" data-form-id="Residente">
+            </div>
+        <div id="visita-form" class="screen form-page" data-form-id="Visita">
+            </div>
+        <div id="evento-form" class="screen form-page" data-form-id="Evento">
+            </div>
+        <div id="servicio-form" class="screen form-page" data-form-id="Personal de servicio">
+            </div>
+        <div id="qr-form" class="screen form-page" data-form-id="Eliminar QR">
+            </div>
+        <div id="incidencias-form" class="screen form-page" data-form-id="Incidencias">
+            </div>
+        
+        <div id="confirmation-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+             <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                 <h3 class="text-lg font-bold mb-4 text-gray-800">¡Guardado!</h3>
+                 <p class="text-gray-600">Los datos han sido enviados correctamente.</p>
+                 <button id="popup-ok-btn" class="mt-6 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">OK</button>
+             </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
