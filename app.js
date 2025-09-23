@@ -43,71 +43,67 @@ document.addEventListener('DOMContentLoaded', () => {
             activeScreen.classList.add('active');
         }
     };
-
-    // --- LÓGICA DE LOGIN ---
-    // *** CORRECCIÓN #1: Inicializa el icono del ojo solo una vez ***
-    togglePassword.classList.add('fa-eye'); // Asegura que solo haya un ojo al inicio
-    togglePassword.addEventListener('click', function () {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-    // *****************************************************************
-
-    // Cargar usuario recordado
-    const rememberedUser = localStorage.getItem('rememberedUser');
-    if (rememberedUser) {
-        usernameInput.value = rememberedUser;
-        rememberMeCheckbox.checked = true;
-    }
-
-    loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita que el formulario recargue la página
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-        loginError.classList.add('hidden');
-        
-        loginButton.disabled = true;
-        loginButton.textContent = 'Verificando...';
-
-        try {
-            const response = await fetch(CONFIG.API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'login', username, password })
-            });
-            
-            const data = await response.json();
-            if (!response.ok || !data.success) {
-                throw new Error(data.message || 'Credenciales inválidas');
-            }
-            
-            currentUser = { username: username, condominio: data.condominio };
-            
-            if (rememberMeCheckbox.checked) {
-                localStorage.setItem('rememberedUser', username);
-            } else {
-                localStorage.removeItem('rememberedUser');
-            }
-            showScreen(SCREENS.MENU);
-
-        } catch (error) {
-            loginError.textContent = error.message;
-            loginError.classList.remove('hidden');
-        } finally {
-            loginButton.disabled = false;
-            loginButton.textContent = 'Entrar';
-        }
-    });
     
-    // --- LÓGICA DEL MENÚ ---
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const screenId = item.dataset.screen;
-            if (screenId) showScreen(screenId);
+    // --- LÓGICA DE LOGIN ---
+// *** CORRECCIÓN DEFINITIVA: Limpia y establece el ícono inicial ***
+togglePassword.classList.remove('fa-eye', 'fa-eye-slash'); // 1. Quita cualquier ícono previo
+togglePassword.classList.add('fa-eye'); // 2. Establece el ícono de ojo cerrado
+
+togglePassword.addEventListener('click', function () {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
+// *****************************************************************
+
+// Cargar usuario recordado
+const rememberedUser = localStorage.getItem('rememberedUser');
+if (rememberedUser) {
+    usernameInput.value = rememberedUser;
+    rememberMeCheckbox.checked = true;
+}
+
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Evita que el formulario recargue la página
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+    loginError.classList.add('hidden');
+    
+    loginButton.disabled = true;
+    loginButton.textContent = 'Verificando...';
+
+    try {
+        const response = await fetch(CONFIG.API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'login', username, password })
         });
-    });
+        
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Credenciales inválidas');
+        }
+        
+        currentUser = { username: username, condominio: data.condominio };
+        
+        if (rememberMeCheckbox.checked) {
+            localStorage.setItem('rememberedUser', username);
+        } else {
+            localStorage.removeItem('rememberedUser');
+        }
+        showScreen(SCREENS.MENU);
+
+    } catch (error) {
+        loginError.textContent = error.message;
+        loginError.classList.remove('hidden');
+    } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = 'Entrar';
+    }
+});
+
+    
 
     // --- GENERACIÓN DINÁMICA DE FORMULARIOS ---
     const formDefinitions = {
@@ -249,4 +245,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Asegurarse de que al cargar la página se muestre la pantalla de login
     showScreen(SCREENS.LOGIN);
+
 });
