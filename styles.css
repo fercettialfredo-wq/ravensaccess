@@ -5,7 +5,7 @@ html, body {
     overflow-x: hidden; 
 }
 body { 
-    font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     background-color: #000000; 
 }
 #app-container { 
@@ -85,16 +85,12 @@ body {
     display: flex; 
     align-items: center; 
 }
-/* *** CORRECCIÓN #1: Asegura que el ojo por defecto sea fa-eye y se maneje por JS *** */
-/* Eliminamos el fa-eye del HTML para que solo el JS lo agregue o quite */
 #togglePassword { 
     position: absolute; 
     right: 0.75rem; 
     cursor: pointer; 
     color: #4a5568; 
 }
-/* ******************************************************************************** */
-
 .main-menu-grid { 
     flex-grow: 1; 
     display: grid; 
@@ -131,9 +127,7 @@ body {
 .form-page { 
     flex-direction: column; 
     height: 100%; 
-    /* *** CORRECCIÓN #2: Añadir un fondo blanco por defecto al form-container *** */
-    background-color: #ffffff; /* Esto asegura que el contenido del formulario se vea */
-    /* ************************************************************************** */
+    background-color: #ffffff;
 }
 .form-title-section { 
     background-color: #1f2937; 
@@ -152,9 +146,7 @@ body {
     padding: 1.5rem; 
     flex-grow: 1; 
     overflow-y: auto; 
-    /* *** CORRECCIÓN #2: Mantener el fondo blanco para el área de los inputs *** */
     background-color: #ffffff; 
-    /* ************************************************************************** */
 }
 .btn-primary, .btn-save {
     color: white;
@@ -197,4 +189,11 @@ input[type="password"] {
 .icon-image {
     width: 64px;  
     height: 64px;  
+}
+
+/* --- CÓDIGO AÑADIDO PARA OCULTAR EL OJO DEL NAVEGADOR --- */
+/* Oculta el ojo que el navegador añade por defecto */
+input[type="password"]::-webkit-password-reveal-button {
+    display: none;
+    -webkit-appearance: none;
 }
