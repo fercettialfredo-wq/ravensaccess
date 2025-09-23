@@ -73,13 +73,26 @@ document.addEventListener('DOMContentLoaded', () => {
             loginButton.textContent = 'Verificando...';
 
             try {
-                // Simulación de login exitoso para pruebas
-                if (username && password) {
-                    currentUser = { username: username, condominio: 'TestCondo' };
-                    showScreen(SCREENS.MENU);
-                } else {
-                    throw new Error('Credenciales inválidas');
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', username, password })
+                });
+                
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Credenciales inválidas');
                 }
+                
+                currentUser = { username: username, condominio: data.condominio };
+                
+                if (rememberMeCheckbox.checked) {
+                    localStorage.setItem('rememberedUser', username);
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
+                showScreen(SCREENS.MENU);
+
             } catch (error) {
                 loginError.textContent = error.message;
                 loginError.classList.remove('hidden');
@@ -104,42 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Error: No se encontraron los elementos del menú.");
     }
 
-    // --- DEFINICIÓN DE FORMULARIOS (AQUÍ ESTÁN LOS CAMBIOS) ---
+    // --- DEFINICIÓN DE FORMULARIOS ---
     const formDefinitions = {
-        'Residente': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }
-        ],
-        'Visita': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }
-        ],
-        'Evento': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }
-        ],
-        'Personal de servicio': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Cargo', type: 'text' } // <-- CAMBIO AQUÍ
-        ],
-        'Eliminar QR': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }
-        ],
-        'Incidencias': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Incidencia', type: 'text' }
-        ]
+        'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
+        'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
+        'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
+        'Personal de servicio': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }],
+        'Eliminar QR': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }],
+        'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'text' }]
     };
 
     function generateFormContent(formPage) {
@@ -187,10 +172,62 @@ document.addEventListener('DOMContentLoaded', () => {
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
     }
     
+    // --- LÓGICA DE ENVÍO DE FORMULARIOS (FUNCIÓN RESTAURADA) ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
-        // ... (resto de la lógica de envío se mantiene igual)
+        const formPage = form.closest('.form-page');
+        const formId = formPage.dataset.formId;
+        const inputs = form.querySelectorAll('input[data-field], select[data-field]');
+        const saveButton = form.querySelector('.btn-save');
+        const errorP = form.querySelector('.form-error');
+
+        errorP.classList.add('hidden');
+        
+        const data = {
+            action: 'submit_form',
+            formulario: formId,
+            condominio: currentUser.condominio || 'No especificado',
+            registradoPor: currentUser.username || 'No especificado'
+        };
+
+        let allFieldsValid = true;
+        inputs.forEach(input => {
+            data[input.dataset.field] = input.value.trim();
+            if (!input.value.trim()) {
+                allFieldsValid = false;
+            }
+        });
+
+        if (!allFieldsValid) {
+            errorP.textContent = "Por favor, rellena todos los campos.";
+            errorP.classList.remove('hidden');
+            return;
+        }
+        
+        saveButton.disabled = true;
+        saveButton.textContent = 'Guardando...';
+
+        try {
+            const response = await fetch(CONFIG.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || 'Error en el servidor');
+            }
+            showConfirmationPopup();
+
+        } catch (error) {
+            console.error("Error al enviar datos:", error);
+            errorP.textContent = "Hubo un error al guardar los datos.";
+            errorP.classList.remove('hidden');
+        } finally {
+            saveButton.disabled = false;
+            saveButton.textContent = 'Guardar';
+        }
     }
 
     function showConfirmationPopup() {
