@@ -36,81 +36,88 @@ document.addEventListener('DOMContentLoaded', () => {
         screens.forEach(screen => screen.classList.remove('active'));
         const activeScreen = document.getElementById(screenId);
         if (activeScreen) {
-            // Si es una página de formulario, genera su contenido dinámicamente
             if (activeScreen.classList.contains('form-page')) {
                 generateFormContent(activeScreen);
             }
             activeScreen.classList.add('active');
+        } else {
+            console.error(`Error: No se encontró la pantalla con ID "${screenId}"`);
         }
     };
     
     // --- LÓGICA DE LOGIN ---
-    // *** CORRECCIÓN DEFINITIVA: Limpia y establece el ícono inicial ***
-    togglePassword.classList.remove('fa-eye', 'fa-eye-slash'); // 1. Quita cualquier ícono previo
-    togglePassword.classList.add('fa-eye'); // 2. Establece el ícono de ojo cerrado
+    if (loginForm && togglePassword) { // <<-- Verificación anti-errores
+        togglePassword.classList.remove('fa-eye', 'fa-eye-slash');
+        togglePassword.classList.add('fa-eye');
 
-    togglePassword.addEventListener('click', function () {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-    // *****************************************************************
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
 
-    // Cargar usuario recordado
-    const rememberedUser = localStorage.getItem('rememberedUser');
-    if (rememberedUser) {
-        usernameInput.value = rememberedUser;
-        rememberMeCheckbox.checked = true;
+        const rememberedUser = localStorage.getItem('rememberedUser');
+        if (rememberedUser) {
+            usernameInput.value = rememberedUser;
+            rememberMeCheckbox.checked = true;
+        }
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            loginError.classList.add('hidden');
+            
+            loginButton.disabled = true;
+            loginButton.textContent = 'Verificando...';
+
+            try {
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'login', username, password })
+                });
+                
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Credenciales inválidas');
+                }
+                
+                currentUser = { username: username, condominio: data.condominio };
+                
+                if (rememberMeCheckbox.checked) {
+                    localStorage.setItem('rememberedUser', username);
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
+                showScreen(SCREENS.MENU);
+
+            } catch (error) {
+                loginError.textContent = error.message;
+                loginError.classList.remove('hidden');
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Entrar';
+            }
+        });
+    } else {
+        console.error("Error: No se encontró el formulario de login o el botón para mostrar/ocultar contraseña.");
     }
 
-    loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Evita que el formulario recargue la página
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-        loginError.classList.add('hidden');
-        
-        loginButton.disabled = true;
-        loginButton.textContent = 'Verificando...';
-
-        try {
-            const response = await fetch(CONFIG.API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'login', username, password })
+    // --- LÓGICA DEL MENÚ ---
+    if (menuItems.length > 0) { // <<-- Verificación anti-errores
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const screenId = item.dataset.screen;
+                if (screenId) showScreen(screenId);
             });
-            
-            const data = await response.json();
-            if (!response.ok || !data.success) {
-                throw new Error(data.message || 'Credenciales inválidas');
-            }
-            
-            currentUser = { username: username, condominio: data.condominio };
-            
-            if (rememberMeCheckbox.checked) {
-                localStorage.setItem('rememberedUser', username);
-            } else {
-                localStorage.removeItem('rememberedUser');
-            }
-            showScreen(SCREENS.MENU);
-
-        } catch (error) {
-            loginError.textContent = error.message;
-            loginError.classList.remove('hidden');
-        } finally {
-            loginButton.disabled = false;
-            loginButton.textContent = 'Entrar';
-        }
-    });
-
-    // --- LÓGICA DEL MENÚ (SECCIÓN QUE FALTABA) ---
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const screenId = item.dataset.screen;
-            if (screenId) showScreen(screenId);
         });
-    });
+    } else {
+        console.error("Error: No se encontraron los elementos del menú.");
+    }
 
+    // El resto del código se mantiene igual...
     // --- GENERACIÓN DINÁMICA DE FORMULARIOS ---
     const formDefinitions = {
         'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Número', type: 'text' }],
@@ -122,8 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function generateFormContent(formPage) {
-        // Limpiar el contenido existente antes de generar uno nuevo
-        formPage.innerHTML = ''; // Limpia todo para evitar duplicados
+        formPage.innerHTML = ''; 
 
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
@@ -131,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fields.forEach(field => {
             const fieldId = `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
-            const dataField = field.field || field.label; // Usa un nombre de campo específico si se proporciona
+            const dataField = field.field || field.label;
             
             let inputHtml = '';
             if (field.type === 'select') {
@@ -144,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fieldsHtml += `<div><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
-        // Regenerar todo el contenido del formulario, incluyendo header y título
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section">
@@ -164,12 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         
-        // Añadir listeners a los nuevos elementos
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
     }
     
-    // --- LÓGICA DE ENVÍO DE FORMULARIOS ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -227,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- LÓGICA DEL POPUP ---
     function showConfirmationPopup() {
         if (popup) popup.style.display = 'flex';
     }
@@ -237,14 +239,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (popup) popup.style.display = 'none';
             const activeForm = document.querySelector('.form-page.active form');
             if (activeForm) {
-                activeForm.reset(); // Limpia todos los campos del formulario
+                activeForm.reset();
                 activeForm.querySelector('.form-error').classList.add('hidden');
             }
             showScreen(SCREENS.MENU);
         });
     }
 
-    // Asegurarse de que al cargar la página se muestre la pantalla de login
     showScreen(SCREENS.LOGIN);
-
 });
