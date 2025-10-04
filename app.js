@@ -1,25 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        // IMPORTANTE: La URL ahora apunta a un "proxy" en tu propio servidor.
-        // Esto evita exponer tu API key secreta en el código del cliente.
-        // Tu servidor recibirá la petición y la reenviará a la URL de Azure de forma segura.
-        API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ==' 
+        API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ=='
     };
-
     const SCREENS = {
         LOGIN: 'login-screen',
         MENU: 'menu-screen'
     };
-    
-    // --- ESTADO DE LA APLICACIÓN ---
     let currentUser = {};
-
-    // --- ELEMENTOS DEL DOM ---
     const screens = document.querySelectorAll('.screen');
     const popup = document.getElementById('confirmation-popup');
 
-    // --- LÓGICA DE NAVEGACIÓN ---
     const showScreen = (screenId) => {
         screens.forEach(screen => screen.classList.remove('active'));
         const activeScreen = document.getElementById(screenId);
@@ -33,8 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // --- INICIALIZACIÓN DE MÓDULOS ---
-
     const initLogin = () => {
         const loginForm = document.getElementById('login-form');
         if (!loginForm) return;
@@ -46,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const togglePassword = document.getElementById('togglePassword');
         const loginError = document.getElementById('login-error');
 
-        // Lógica para mostrar/ocultar contraseña
         togglePassword.addEventListener('click', function () {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
@@ -54,19 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.toggle('fa-eye-slash');
         });
 
-        // Recordar usuario
         const rememberedUser = localStorage.getItem('rememberedUser');
         if (rememberedUser) {
             usernameInput.value = rememberedUser;
             rememberMeCheckbox.checked = true;
         }
 
-        // Envío del formulario de login
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
-            
             loginError.classList.add('hidden');
             loginButton.disabled = true;
             loginButton.textContent = 'Verificando...';
@@ -77,22 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'login', username, password })
                 });
-                
                 const data = await response.json();
                 if (!response.ok || !data.success) {
                     throw new Error(data.message || 'Credenciales inválidas');
                 }
-                
                 currentUser = { username: username, condominio: data.condominio };
-                sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Usar sessionStorage
-                
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
                 if (rememberMeCheckbox.checked) {
                     localStorage.setItem('rememberedUser', username);
                 } else {
                     localStorage.removeItem('rememberedUser');
                 }
                 showScreen(SCREENS.MENU);
-
             } catch (error) {
                 loginError.textContent = error.message;
                 loginError.classList.remove('hidden');
@@ -104,8 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initMenu = () => {
-        const menuItems = document.querySelectorAll('.menu-item');
-        menuItems.forEach(item => {
+        document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => {
                 const screenId = item.dataset.screen;
                 if (screenId) showScreen(screenId);
@@ -114,15 +93,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initLogout = () => {
-        const logoutButton = document.getElementById('logout-button');
-        logoutButton.addEventListener('click', () => {
+        document.getElementById('logout-button').addEventListener('click', () => {
             currentUser = {};
             sessionStorage.removeItem('currentUser');
             showScreen(SCREENS.LOGIN);
         });
     };
 
-    // --- LÓGICA DE FORMULARIOS ---
     const formDefinitions = {
         'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
@@ -140,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fields.forEach(field => {
             const fieldId = `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
             const dataField = field.field || field.label;
-            
             let inputHtml = '';
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
@@ -150,8 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" required class="input-field">`;
             }
-
-            fieldsHtml += `<div><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
+            // Envolvemos cada campo en un div para la validación
+            fieldsHtml += `<div class="form-field"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
         formPage.innerHTML = `
@@ -163,24 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="form-container">
-                <form class="space-y-4" novalidate>
-                    ${fieldsHtml}
-                    <div class="mt-8">
-                        <button type="submit" class="btn-save py-3">Guardar</button>
-                    </div>
-                    <p class="form-error text-red-600 text-sm text-center hidden mt-2"></p>
-                </form>
-            </div>
-        `;
+                <form class="space-y-4" novalidate>${fieldsHtml}<div class="mt-8"><button type="submit" class="btn-save py-3">Guardar</button></div><p class="form-error text-red-600 text-sm text-center hidden mt-2"></p></form>
+            </div>`;
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
         
-        // Añadir validación en tiempo real
         formPage.querySelectorAll('.input-field').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.value.trim()) {
-                    input.classList.remove('border-red-500');
+                    // CAMBIO: Quita la clase de error del div contenedor
+                    input.closest('.form-field').classList.remove('form-field-invalid');
                 }
             });
         });
@@ -191,19 +160,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const form = event.target;
         const formPage = form.closest('.form-page');
         const formId = formPage.dataset.formId;
-        const inputs = form.querySelectorAll('.input-field');
+        const fields = form.querySelectorAll('.form-field');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
 
         errorP.classList.add('hidden');
-        
         let allFieldsValid = true;
-        inputs.forEach(input => {
+
+        fields.forEach(field => {
+            const input = field.querySelector('.input-field');
             if (!input.value.trim()) {
                 allFieldsValid = false;
-                input.classList.add('border-red-500'); // Estilo para campo inválido
+                field.classList.add('form-field-invalid'); // CAMBIO: Añade clase de error al div
             } else {
-                input.classList.remove('border-red-500');
+                field.classList.remove('form-field-invalid'); // CAMBIO: Quita clase de error al div
             }
         });
 
@@ -219,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             condominio: currentUser.condominio || 'No especificado',
             registradoPor: currentUser.username || 'No especificado'
         };
-        inputs.forEach(input => {
+        form.querySelectorAll('.input-field').forEach(input => {
             data[input.dataset.field] = input.value.trim();
         });
 
@@ -237,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errData.message || 'Error en el servidor');
             }
             showConfirmationPopup();
-
         } catch (error) {
             console.error("Error al enviar datos:", error);
             errorP.textContent = "Hubo un error al guardar los datos.";
@@ -256,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const activeForm = document.querySelector('.form-page.active form');
                 if (activeForm) {
                     activeForm.reset();
-                    activeForm.querySelectorAll('.input-field').forEach(input => input.classList.remove('border-red-500'));
+                    activeForm.querySelectorAll('.form-field').forEach(field => field.classList.remove('form-field-invalid'));
                     activeForm.querySelector('.form-error').classList.add('hidden');
                 }
                 showScreen(SCREENS.MENU);
@@ -274,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- PUNTO DE ENTRADA DE LA APP ---
     const main = () => {
         initLogin();
         initMenu();
