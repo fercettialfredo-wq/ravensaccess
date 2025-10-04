@@ -14,11 +14,10 @@ body {
     flex-direction: column; 
     background-color: #000000; 
 }
-/* CAMBIO: Aumentado el padding horizontal para alejar el botón de la derecha */
 .header-app { 
     background-color: #000000; 
     color: white; 
-    padding: 1rem 1.5rem; /* Ajuste aquí */
+    padding: 1rem 1.5rem;
     display: flex; 
     align-items: center; 
     justify-content: space-between;
@@ -63,11 +62,13 @@ body {
     height: 100px; 
     margin-bottom: 1rem; 
 }
+/* CAMBIO: Centrar el texto Ravens Access */
 .login-header-text { 
     font-weight: bold; 
     font-size: 2.25rem; 
     color: white; 
-    text-transform: uppercase; 
+    text-transform: uppercase;
+    text-align: center; /* Aseguramos que esté centrado */
 }
 .main-title-box { 
     background-color: #5a1a2e; 
@@ -180,31 +181,31 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
-/* CAMBIO: Mejoras visuales para los campos de los formularios */
 input, select, textarea { 
     border-color: #cbd5e1 !important; 
     color: #1f2937 !important;
-    background-color: #f7fafc; /* Tono gris claro */
+    background-color: #f7fafc;
     margin-top: 0.25rem;
-    margin-bottom: 0.5rem; /* Espacio inferior */
+    margin-bottom: 0.5rem;
     display: block;
     width: 100%;
-    padding: 0.75rem !important; /* Más altos */
+    padding: 0.75rem !important;
     border-radius: 0.375rem;
     border-width: 1px;
 }
 input:focus, select:focus, textarea:focus { 
     --tw-ring-color: #5a1a2e !important; 
     border-color: #5a1a2e !important; 
-    background-color: #ffffff; /* Fondo blanco al seleccionar */
+    background-color: #ffffff;
 }
 input[type="password"] { 
     padding-right: 2.5rem !important; 
 }
+/* CAMBIO: Quitar el filtro para que los iconos mantengan su color original */
 .icon-image {
     width: 64px;  
     height: 64px;
-    filter: invert(1);
+    /* filter: invert(1); <-- REMOVED */
 }
 input[type="password"]::-webkit-password-reveal-button {
     display: none;
