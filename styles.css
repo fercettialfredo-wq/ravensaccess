@@ -14,13 +14,14 @@ body {
     flex-direction: column; 
     background-color: #000000; 
 }
+/* CAMBIO: Cabecera ajustada para espaciado correcto */
 .header-app { 
     background-color: #000000; 
     color: white; 
     padding: 1rem; 
     display: flex; 
     align-items: center; 
-    justify-content: center; 
+    justify-content: space-between; /* <-- Alinear elementos a los extremos */
     flex-shrink: 0; 
 }
 .header-logo { 
@@ -148,6 +149,11 @@ body {
     overflow-y: auto; 
     background-color: #ffffff; 
 }
+/* CAMBIO: Nueva clase para la validación de formularios */
+.form-field-invalid label {
+    color: #c53030; /* Rojo */
+    font-weight: bold;
+}
 .btn-primary, .btn-save {
     color: white;
     padding: 0.75rem 1.5rem;
@@ -175,11 +181,17 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
-input, select { 
+input, select, textarea { 
     border-color: #cbd5e1 !important; 
-    color: #1f2937 !important; 
+    color: #1f2937 !important;
+    margin-top: 0.25rem;
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    border-width: 1px;
 }
-input:focus, select:focus { 
+input:focus, select:focus, textarea:focus { 
     --tw-ring-color: #5a1a2e !important; 
     border-color: #5a1a2e !important; 
 }
@@ -188,11 +200,11 @@ input[type="password"] {
 }
 .icon-image {
     width: 64px;  
-    height: 64px;  
+    height: 64px;
+    filter: invert(1); /* Pone los iconos SVG en blanco para que contrasten */
 }
 
 /* --- CÓDIGO AÑADIDO PARA OCULTAR EL OJO DEL NAVEGADOR --- */
-/* Oculta el ojo que el navegador añade por defecto */
 input[type="password"]::-webkit-password-reveal-button {
     display: none;
     -webkit-appearance: none;
