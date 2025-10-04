@@ -1,18 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        API_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ=='
+        // IMPORTANTE: La URL ahora apunta a un "proxy" en tu propio servidor.
+        // Esto evita exponer tu API key secreta en el código del cliente.
+        // Tu servidor recibirá la petición y la reenviará a la URL de Azure de forma segura.
+        API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ==' 
     };
 
     const SCREENS = {
         LOGIN: 'login-screen',
-        MENU: 'menu-screen',
-        RESIDENTE: 'residente-form',
-        VISITA: 'visita-form',
-        EVENTO: 'evento-form',
-        SERVICIO: 'servicio-form',
-        QR: 'qr-form',
-        INCIDENCIAS: 'incidencias-form'
+        MENU: 'menu-screen'
     };
     
     // --- ESTADO DE LA APLICACIÓN ---
@@ -20,16 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- ELEMENTOS DEL DOM ---
     const screens = document.querySelectorAll('.screen');
-    const loginForm = document.getElementById('login-form');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
-    const rememberMeCheckbox = document.getElementById('remember-me');
-    const loginButton = document.getElementById('login-button');
-    const togglePassword = document.getElementById('togglePassword');
-    const loginError = document.getElementById('login-error');
-    const menuItems = document.querySelectorAll('.menu-item');
     const popup = document.getElementById('confirmation-popup');
-    const okBtn = document.getElementById('popup-ok-btn');
 
     // --- LÓGICA DE NAVEGACIÓN ---
     const showScreen = (screenId) => {
@@ -45,11 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // --- LÓGICA DE LOGIN ---
-    if (loginForm && togglePassword) {
-        togglePassword.classList.remove('fa-eye', 'fa-eye-slash');
-        togglePassword.classList.add('fa-eye');
+    // --- INICIALIZACIÓN DE MÓDULOS ---
 
+    const initLogin = () => {
+        const loginForm = document.getElementById('login-form');
+        if (!loginForm) return;
+
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const rememberMeCheckbox = document.getElementById('remember-me');
+        const loginButton = document.getElementById('login-button');
+        const togglePassword = document.getElementById('togglePassword');
+        const loginError = document.getElementById('login-error');
+
+        // Lógica para mostrar/ocultar contraseña
         togglePassword.addEventListener('click', function () {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
@@ -57,23 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
             this.classList.toggle('fa-eye-slash');
         });
 
+        // Recordar usuario
         const rememberedUser = localStorage.getItem('rememberedUser');
         if (rememberedUser) {
             usernameInput.value = rememberedUser;
             rememberMeCheckbox.checked = true;
         }
 
+        // Envío del formulario de login
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
-            loginError.classList.add('hidden');
             
+            loginError.classList.add('hidden');
             loginButton.disabled = true;
             loginButton.textContent = 'Verificando...';
 
             try {
-                const response = await fetch(CONFIG.API_URL, {
+                const response = await fetch(CONFIG.API_PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'login', username, password })
@@ -85,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 currentUser = { username: username, condominio: data.condominio };
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Usar sessionStorage
                 
                 if (rememberMeCheckbox.checked) {
                     localStorage.setItem('rememberedUser', username);
@@ -101,35 +101,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginButton.textContent = 'Entrar';
             }
         });
-    } else {
-        console.error("Error: No se encontró el formulario de login o el botón para mostrar/ocultar contraseña.");
-    }
+    };
 
-    // --- LÓGICA DEL MENÚ ---
-    if (menuItems.length > 0) {
+    const initMenu = () => {
+        const menuItems = document.querySelectorAll('.menu-item');
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 const screenId = item.dataset.screen;
                 if (screenId) showScreen(screenId);
             });
         });
-    } else {
-        console.error("Error: No se encontraron los elementos del menú.");
-    }
+    };
 
-    // --- DEFINICIÓN DE FORMULARIOS ---
+    const initLogout = () => {
+        const logoutButton = document.getElementById('logout-button');
+        logoutButton.addEventListener('click', () => {
+            currentUser = {};
+            sessionStorage.removeItem('currentUser');
+            showScreen(SCREENS.LOGIN);
+        });
+    };
+
+    // --- LÓGICA DE FORMULARIOS ---
     const formDefinitions = {
         'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
         'Personal de servicio': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }],
         'Eliminar QR': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }],
-        'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'text' }]
+        'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'textarea' }]
     };
 
-    function generateFormContent(formPage) {
-        formPage.innerHTML = ''; 
-
+    const generateFormContent = (formPage) => {
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
         let fieldsHtml = '';
@@ -140,10 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let inputHtml = '';
             if (field.type === 'select') {
-                const optionsHtml = field.options.map(opt => `<option>${opt}</option>`).join('');
-                inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">${optionsHtml}</select>`;
+                const optionsHtml = field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+                inputHtml = `<select id="${fieldId}" data-field="${dataField}" required class="input-field">${optionsHtml}</select>`;
+            } else if (field.type === 'textarea') {
+                inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" required class="input-field" rows="4"></textarea>`;
             } else {
-                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">`;
+                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" required class="input-field">`;
             }
 
             fieldsHtml += `<div><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
@@ -158,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="form-container">
-                <form class="space-y-4">
+                <form class="space-y-4" novalidate>
                     ${fieldsHtml}
                     <div class="mt-8">
                         <button type="submit" class="btn-save py-3">Guardar</button>
@@ -170,19 +175,43 @@ document.addEventListener('DOMContentLoaded', () => {
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
+        
+        // Añadir validación en tiempo real
+        formPage.querySelectorAll('.input-field').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.value.trim()) {
+                    input.classList.remove('border-red-500');
+                }
+            });
+        });
     }
     
-    // --- LÓGICA DE ENVÍO DE FORMULARIOS (FUNCIÓN RESTAURADA) ---
-    async function handleFormSubmit(event) {
+    const handleFormSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
         const formPage = form.closest('.form-page');
         const formId = formPage.dataset.formId;
-        const inputs = form.querySelectorAll('input[data-field], select[data-field]');
+        const inputs = form.querySelectorAll('.input-field');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
 
         errorP.classList.add('hidden');
+        
+        let allFieldsValid = true;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                allFieldsValid = false;
+                input.classList.add('border-red-500'); // Estilo para campo inválido
+            } else {
+                input.classList.remove('border-red-500');
+            }
+        });
+
+        if (!allFieldsValid) {
+            errorP.textContent = "Por favor, rellena todos los campos marcados.";
+            errorP.classList.remove('hidden');
+            return;
+        }
         
         const data = {
             action: 'submit_form',
@@ -190,26 +219,15 @@ document.addEventListener('DOMContentLoaded', () => {
             condominio: currentUser.condominio || 'No especificado',
             registradoPor: currentUser.username || 'No especificado'
         };
-
-        let allFieldsValid = true;
         inputs.forEach(input => {
             data[input.dataset.field] = input.value.trim();
-            if (!input.value.trim()) {
-                allFieldsValid = false;
-            }
         });
 
-        if (!allFieldsValid) {
-            errorP.textContent = "Por favor, rellena todos los campos.";
-            errorP.classList.remove('hidden');
-            return;
-        }
-        
         saveButton.disabled = true;
         saveButton.textContent = 'Guardando...';
 
         try {
-            const response = await fetch(CONFIG.API_URL, {
+            const response = await fetch(CONFIG.API_PROXY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -230,21 +248,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function showConfirmationPopup() {
-        if (popup) popup.style.display = 'flex';
-    }
-
-    if (okBtn) {
-        okBtn.addEventListener('click', () => {
-            if (popup) popup.style.display = 'none';
-            const activeForm = document.querySelector('.form-page.active form');
-            if (activeForm) {
-                activeForm.reset();
-                activeForm.querySelector('.form-error').classList.add('hidden');
-            }
+    const initPopup = () => {
+        const okBtn = document.getElementById('popup-ok-btn');
+        if (okBtn) {
+            okBtn.addEventListener('click', () => {
+                if (popup) popup.style.display = 'none';
+                const activeForm = document.querySelector('.form-page.active form');
+                if (activeForm) {
+                    activeForm.reset();
+                    activeForm.querySelectorAll('.input-field').forEach(input => input.classList.remove('border-red-500'));
+                    activeForm.querySelector('.form-error').classList.add('hidden');
+                }
+                showScreen(SCREENS.MENU);
+            });
+        }
+    };
+    
+    const checkSession = () => {
+        const savedUser = sessionStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
             showScreen(SCREENS.MENU);
-        });
-    }
+        } else {
+            showScreen(SCREENS.LOGIN);
+        }
+    };
 
-    showScreen(SCREENS.LOGIN);
+    // --- PUNTO DE ENTRADA DE LA APP ---
+    const main = () => {
+        initLogin();
+        initMenu();
+        initLogout();
+        initPopup();
+        checkSession();
+    };
+
+    main();
 });
