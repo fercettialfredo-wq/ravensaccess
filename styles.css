@@ -14,14 +14,14 @@ body {
     flex-direction: column; 
     background-color: #000000; 
 }
-/* CAMBIO: Cabecera ajustada para espaciado correcto */
+/* CAMBIO: Aumentado el padding horizontal para alejar el botón de la derecha */
 .header-app { 
     background-color: #000000; 
     color: white; 
-    padding: 1rem; 
+    padding: 1rem 1.5rem; /* Ajuste aquí */
     display: flex; 
     align-items: center; 
-    justify-content: space-between; /* <-- Alinear elementos a los extremos */
+    justify-content: space-between;
     flex-shrink: 0; 
 }
 .header-logo { 
@@ -149,9 +149,8 @@ body {
     overflow-y: auto; 
     background-color: #ffffff; 
 }
-/* CAMBIO: Nueva clase para la validación de formularios */
 .form-field-invalid label {
-    color: #c53030; /* Rojo */
+    color: #c53030;
     font-weight: bold;
 }
 .btn-primary, .btn-save {
@@ -181,30 +180,32 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
+/* CAMBIO: Mejoras visuales para los campos de los formularios */
 input, select, textarea { 
     border-color: #cbd5e1 !important; 
     color: #1f2937 !important;
+    background-color: #f7fafc; /* Tono gris claro */
     margin-top: 0.25rem;
+    margin-bottom: 0.5rem; /* Espacio inferior */
     display: block;
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem !important; /* Más altos */
     border-radius: 0.375rem;
     border-width: 1px;
 }
 input:focus, select:focus, textarea:focus { 
     --tw-ring-color: #5a1a2e !important; 
     border-color: #5a1a2e !important; 
+    background-color: #ffffff; /* Fondo blanco al seleccionar */
 }
 input[type="password"] { 
-    padding-right: 2.5rem; 
+    padding-right: 2.5rem !important; 
 }
 .icon-image {
     width: 64px;  
     height: 64px;
-    filter: invert(1); /* Pone los iconos SVG en blanco para que contrasten */
+    filter: invert(1);
 }
-
-/* --- CÓDIGO AÑADIDO PARA OCULTAR EL OJO DEL NAVEGADOR --- */
 input[type="password"]::-webkit-password-reveal-button {
     display: none;
     -webkit-appearance: none;
