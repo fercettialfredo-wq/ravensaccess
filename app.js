@@ -1,4 +1,5 @@
-    document.addEventListener('DOMContentLoaded', () => {
+
+   document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
         // IMPORTANTE: Apunta a tu "proxy" en el servidor para proteger la API key.
