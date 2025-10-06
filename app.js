@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     const CONFIG = {
         API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ=='
     };
@@ -100,11 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // CAMBIO: Actualizada la definición del formulario "Personal de servicio"
     const formDefinitions = {
         'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
-        'Personal de servicio': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }],
+        'Personal de servicio': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Cargo', type: 'text' },
+            { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
+            { label: 'Fecha Inicio', type: 'date', conditionalId: 'tipo-personal', conditionalValue: 'Eventual' },
+            { label: 'Fecha Fin', type: 'date', conditionalId: 'tipo-personal', conditionalValue: 'Eventual' }
+        ],
         'Eliminar QR': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }],
         'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'textarea' }]
     };
@@ -113,11 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
         let fieldsHtml = '';
+        let conditionalFieldsInfo = [];
 
         fields.forEach(field => {
-            const fieldId = `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
+            const fieldId = field.id || `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
             const dataField = field.field || field.label;
             let inputHtml = '';
+            
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
                 inputHtml = `<select id="${fieldId}" data-field="${dataField}" required class="input-field">${optionsHtml}</select>`;
@@ -126,21 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" required class="input-field">`;
             }
-            // Envolvemos cada campo en un div para la validación
-            fieldsHtml += `<div class="form-field"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
+            
+            // CAMBIO: Añadir clases para campos condicionales y guardarlos para después
+            const isConditional = field.conditionalId;
+            const containerClasses = isConditional ? 'form-field conditional-field' : 'form-field';
+            if (isConditional) {
+                conditionalFieldsInfo.push(field);
+            }
+            
+            fieldsHtml += `<div class="${containerClasses}" data-conditional-id="${field.conditionalId || ''}" data-conditional-value="${field.conditionalValue || ''}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section">
-                <h2 class="form-title">${formId}</h2>
-                <div class="home-icon cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
-                </div>
-            </div>
-            <div class="form-container">
-                <form class="space-y-4" novalidate>${fieldsHtml}<div class="mt-8"><button type="submit" class="btn-save py-3">Guardar</button></div><p class="form-error text-red-600 text-sm text-center hidden mt-2"></p></form>
-            </div>`;
+            <div class="form-title-section"><h2 class="form-title">${formId}</h2><div class="home-icon cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
+            <div class="form-container"><form class="space-y-4" novalidate>${fieldsHtml}<div class="mt-8"><button type="submit" class="btn-save py-3">Guardar</button></div><p class="form-error text-red-600 text-sm text-center hidden mt-2"></p></form></div>`;
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
@@ -148,18 +159,48 @@ document.addEventListener('DOMContentLoaded', () => {
         formPage.querySelectorAll('.input-field').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.value.trim()) {
-                    // CAMBIO: Quita la clase de error del div contenedor
                     input.closest('.form-field').classList.remove('form-field-invalid');
                 }
             });
         });
+
+        // CAMBIO: Configurar la lógica para los campos condicionales
+        setupConditionalFields(formPage);
     }
+    
+    // CAMBIO: Nueva función para manejar la lógica de mostrar/ocultar
+    const setupConditionalFields = (formPage) => {
+        const triggers = new Set(Array.from(formPage.querySelectorAll('[data-conditional-id]')).map(el => el.dataset.conditionalId));
+        
+        triggers.forEach(triggerId => {
+            const triggerElement = formPage.querySelector(`#${triggerId}`);
+            if (triggerElement) {
+                const updateVisibility = () => {
+                    const selectedValue = triggerElement.value;
+                    const conditionalElements = formPage.querySelectorAll(`[data-conditional-id="${triggerId}"]`);
+                    conditionalElements.forEach(el => {
+                        if (el.dataset.conditionalValue === selectedValue) {
+                            el.classList.add('visible');
+                        } else {
+                            el.classList.remove('visible');
+                            // Limpiar el valor si se oculta
+                            const input = el.querySelector('.input-field');
+                            if (input) input.value = '';
+                        }
+                    });
+                };
+                
+                triggerElement.addEventListener('change', updateVisibility);
+                // Ejecutar al inicio para establecer el estado correcto
+                updateVisibility();
+            }
+        });
+    };
     
     const handleFormSubmit = async (event) => {
         event.preventDefault();
         const form = event.target;
-        const formPage = form.closest('.form-page');
-        const formId = formPage.dataset.formId;
+        const formId = form.closest('.form-page').dataset.formId;
         const fields = form.querySelectorAll('.form-field');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
@@ -169,11 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fields.forEach(field => {
             const input = field.querySelector('.input-field');
-            if (!input.value.trim()) {
+            // CAMBIO: Solo validar si el campo está visible
+            const isVisible = !field.classList.contains('conditional-field') || field.classList.contains('visible');
+            
+            if (isVisible && !input.value.trim()) {
                 allFieldsValid = false;
-                field.classList.add('form-field-invalid'); // CAMBIO: Añade clase de error al div
+                field.classList.add('form-field-invalid');
             } else {
-                field.classList.remove('form-field-invalid'); // CAMBIO: Quita clase de error al div
+                field.classList.remove('form-field-invalid');
             }
         });
 
@@ -190,7 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
             registradoPor: currentUser.username || 'No especificado'
         };
         form.querySelectorAll('.input-field').forEach(input => {
-            data[input.dataset.field] = input.value.trim();
+            // Solo incluir el dato si el campo está visible o no es condicional
+            const fieldContainer = input.closest('.form-field');
+            const isVisible = !fieldContainer.classList.contains('conditional-field') || fieldContainer.classList.contains('visible');
+            if (isVisible) {
+                 data[input.dataset.field] = input.value.trim();
+            }
         });
 
         saveButton.disabled = true;
@@ -226,6 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (activeForm) {
                     activeForm.reset();
                     activeForm.querySelectorAll('.form-field').forEach(field => field.classList.remove('form-field-invalid'));
+                    // Disparar manualmente el evento 'change' en los triggers para resetear la visibilidad
+                    activeForm.querySelectorAll('[id^="tipo-"]').forEach(trigger => trigger.dispatchEvent(new Event('change')));
                     activeForm.querySelector('.form-error').classList.add('hidden');
                 }
                 showScreen(SCREENS.MENU);
