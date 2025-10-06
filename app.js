@@ -1,15 +1,23 @@
     document.addEventListener('DOMContentLoaded', () => {
+    // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ=='
+        // IMPORTANTE: Apunta a tu "proxy" en el servidor para proteger la API key.
+        API_PROXY_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ==' 
     };
+
     const SCREENS = {
         LOGIN: 'login-screen',
         MENU: 'menu-screen'
     };
+    
+    // --- ESTADO DE LA APLICACIÓN ---
     let currentUser = {};
+
+    // --- ELEMENTOS DEL DOM ---
     const screens = document.querySelectorAll('.screen');
     const popup = document.getElementById('confirmation-popup');
 
+    // --- LÓGICA DE NAVEGACIÓN ---
     const showScreen = (screenId) => {
         screens.forEach(screen => screen.classList.remove('active'));
         const activeScreen = document.getElementById(screenId);
@@ -23,6 +31,8 @@
         }
     };
     
+    // --- INICIALIZACIÓN DE MÓDULOS ---
+
     const initLogin = () => {
         const loginForm = document.getElementById('login-form');
         if (!loginForm) return;
@@ -51,6 +61,7 @@
             event.preventDefault();
             const username = usernameInput.value.trim();
             const password = passwordInput.value;
+            
             loginError.classList.add('hidden');
             loginButton.disabled = true;
             loginButton.textContent = 'Verificando...';
@@ -61,18 +72,22 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'login', username, password })
                 });
+                
                 const data = await response.json();
                 if (!response.ok || !data.success) {
                     throw new Error(data.message || 'Credenciales inválidas');
                 }
+                
                 currentUser = { username: username, condominio: data.condominio };
                 sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
                 if (rememberMeCheckbox.checked) {
                     localStorage.setItem('rememberedUser', username);
                 } else {
                     localStorage.removeItem('rememberedUser');
                 }
                 showScreen(SCREENS.MENU);
+
             } catch (error) {
                 loginError.textContent = error.message;
                 loginError.classList.remove('hidden');
@@ -100,7 +115,7 @@
         });
     };
 
-    // CAMBIO: Actualizada la definición del formulario "Personal de servicio"
+    // --- LÓGICA DE FORMULARIOS ---
     const formDefinitions = {
         'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
@@ -122,7 +137,6 @@
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
         let fieldsHtml = '';
-        let conditionalFieldsInfo = [];
 
         fields.forEach(field => {
             const fieldId = field.id || `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
@@ -138,12 +152,8 @@
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" required class="input-field">`;
             }
             
-            // CAMBIO: Añadir clases para campos condicionales y guardarlos para después
             const isConditional = field.conditionalId;
             const containerClasses = isConditional ? 'form-field conditional-field' : 'form-field';
-            if (isConditional) {
-                conditionalFieldsInfo.push(field);
-            }
             
             fieldsHtml += `<div class="${containerClasses}" data-conditional-id="${field.conditionalId || ''}" data-conditional-value="${field.conditionalValue || ''}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
@@ -164,11 +174,9 @@
             });
         });
 
-        // CAMBIO: Configurar la lógica para los campos condicionales
         setupConditionalFields(formPage);
     }
     
-    // CAMBIO: Nueva función para manejar la lógica de mostrar/ocultar
     const setupConditionalFields = (formPage) => {
         const triggers = new Set(Array.from(formPage.querySelectorAll('[data-conditional-id]')).map(el => el.dataset.conditionalId));
         
@@ -183,7 +191,6 @@
                             el.classList.add('visible');
                         } else {
                             el.classList.remove('visible');
-                            // Limpiar el valor si se oculta
                             const input = el.querySelector('.input-field');
                             if (input) input.value = '';
                         }
@@ -191,7 +198,6 @@
                 };
                 
                 triggerElement.addEventListener('change', updateVisibility);
-                // Ejecutar al inicio para establecer el estado correcto
                 updateVisibility();
             }
         });
@@ -210,7 +216,6 @@
 
         fields.forEach(field => {
             const input = field.querySelector('.input-field');
-            // CAMBIO: Solo validar si el campo está visible
             const isVisible = !field.classList.contains('conditional-field') || field.classList.contains('visible');
             
             if (isVisible && !input.value.trim()) {
@@ -234,7 +239,6 @@
             registradoPor: currentUser.username || 'No especificado'
         };
         form.querySelectorAll('.input-field').forEach(input => {
-            // Solo incluir el dato si el campo está visible o no es condicional
             const fieldContainer = input.closest('.form-field');
             const isVisible = !fieldContainer.classList.contains('conditional-field') || fieldContainer.classList.contains('visible');
             if (isVisible) {
@@ -275,7 +279,6 @@
                 if (activeForm) {
                     activeForm.reset();
                     activeForm.querySelectorAll('.form-field').forEach(field => field.classList.remove('form-field-invalid'));
-                    // Disparar manualmente el evento 'change' en los triggers para resetear la visibilidad
                     activeForm.querySelectorAll('[id^="tipo-"]').forEach(trigger => trigger.dispatchEvent(new Event('change')));
                     activeForm.querySelector('.form-error').classList.add('hidden');
                 }
