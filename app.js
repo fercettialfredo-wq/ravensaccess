@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuItems = document.querySelectorAll('.menu-item');
     const popup = document.getElementById('confirmation-popup');
     const okBtn = document.getElementById('popup-ok-btn');
-    const logoutButton = document.getElementById('logout-button'); // Botón de logout
+    const logoutButton = document.getElementById('logout-button');
 
     // --- LÓGICA DE NAVEGACIÓN ---
     const showScreen = (screenId) => {
@@ -110,15 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- LÓGICA DE LOGOUT (CON CORRECCIÓN) ---
+    // --- LÓGICA DE LOGOUT ---
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             currentUser = {};
-            sessionStorage.removeItem('currentUser'); // Limpiar la sesión
-            showScreen(SCREENS.LOGIN); // Volver al login
-            
-            // **AQUÍ ESTÁ LA CORRECCIÓN**: Borra el campo de contraseña
-            passwordInput.value = '';
+            sessionStorage.removeItem('currentUser');
+            passwordInput.value = ''; // Limpia la contraseña
+            showScreen(SCREENS.LOGIN);
         });
     }
 
@@ -133,25 +131,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- DEFINICIÓN DE FORMULARIOS (CON CAMPO "RELACIÓN") ---
+    // --- DEFINICIÓN DE FORMULARIOS ---
     const formDefinitions = {
         'Residente': [
             { label: 'Nombre', type: 'text' }, 
             { label: 'Torre', type: 'text' }, 
             { label: 'Departamento', type: 'text' },
-            { label: 'Relación', type: 'text' } // Añadido
+            { label: 'Relación', type: 'text' }
         ],
-        'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
+        'Visita': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' },
+            { label: 'Motivo', type: 'text' } // Añadido
+        ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
-        'Personal de servicio': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }],
+        'Personal de servicio': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Cargo', type: 'text' },
+            { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
+            { label: 'Fecha Inicio', type: 'date', isConditional: true },
+            { label: 'Fecha Fin', type: 'date', isConditional: true }
+        ],
         'Eliminar QR': [
             { label: 'Nombre', type: 'text' }, 
             { label: 'Torre', type: 'text' }, 
             { label: 'Departamento', type: 'text' }, 
-            { label: 'Relación', type: 'text' }, // Añadido
+            { label: 'Relación', type: 'text' },
             { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }
         ],
-        'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'text' }]
+        'Incidencias': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] },
+            { label: 'Incidencia', type: 'textarea' }
+        ]
     };
 
     function generateFormContent(formPage) {
@@ -162,18 +179,22 @@ document.addEventListener('DOMContentLoaded', () => {
         let fieldsHtml = '';
 
         fields.forEach(field => {
-            const fieldId = `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
+            const fieldId = field.id || `${formId.toLowerCase().replace(/\s/g, '-')}-${field.label.toLowerCase().replace(/\s/g, '-')}`;
             const dataField = field.field || field.label;
             
             let inputHtml = '';
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option>${opt}</option>`).join('');
-                inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">${optionsHtml}</select>`;
+                inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">${optionsHtml}</select>`;
+            } else if (field.type === 'textarea') {
+                inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2" rows="4"></textarea>`;
             } else {
-                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">`;
+                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
             }
+            
+            const conditionalClass = field.isConditional ? 'conditional-field' : '';
 
-            fieldsHtml += `<div><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
+            fieldsHtml += `<div class="${conditionalClass}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
         formPage.innerHTML = `
@@ -197,14 +218,35 @@ document.addEventListener('DOMContentLoaded', () => {
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
+        setupConditionalFields(formPage);
     }
     
+    function setupConditionalFields(formPage) {
+        const trigger = formPage.querySelector('#tipo-personal');
+        const conditionalFields = formPage.querySelectorAll('.conditional-field');
+
+        if (!trigger || conditionalFields.length === 0) return;
+
+        const updateVisibility = () => {
+            const shouldBeVisible = trigger.value === 'Eventual';
+            conditionalFields.forEach(field => {
+                field.style.display = shouldBeVisible ? 'block' : 'none';
+                if (!shouldBeVisible) {
+                    const input = field.querySelector('input');
+                    if (input) input.value = '';
+                }
+            });
+        };
+        trigger.addEventListener('change', updateVisibility);
+        updateVisibility();
+    }
+
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
         const formPage = form.closest('.form-page');
         const formId = formPage.dataset.formId;
-        const inputs = form.querySelectorAll('input[data-field], select[data-field]');
+        const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
 
@@ -219,9 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            data[input.dataset.field] = input.value.trim();
-            if (!input.value.trim()) {
-                allFieldsValid = false;
+            const fieldContainer = input.closest('div');
+            if (fieldContainer.style.display !== 'none') {
+                data[input.dataset.field] = input.value.trim();
+                if (!input.value.trim()) {
+                    allFieldsValid = false;
+                }
             }
         });
 
@@ -266,6 +311,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const activeForm = document.querySelector('.form-page.active form');
             if (activeForm) {
                 activeForm.reset();
+                const trigger = activeForm.querySelector('#tipo-personal');
+                if (trigger) trigger.dispatchEvent(new Event('change'));
                 activeForm.querySelector('.form-error').classList.add('hidden');
             }
             showScreen(SCREENS.MENU);
