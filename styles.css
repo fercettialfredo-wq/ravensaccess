@@ -149,10 +149,6 @@ body {
     overflow-y: auto; 
     background-color: #ffffff; 
 }
-/* CORRECCIÓN: Clase para manejar el espaciado de los campos del formulario */
-.form-field {
-    margin-bottom: 1rem;
-}
 .form-field-invalid label {
     color: #c53030;
     font-weight: bold;
@@ -189,7 +185,6 @@ input, select, textarea {
     color: #1f2937 !important;
     background-color: #f7fafc;
     margin-top: 0.25rem;
-    /* margin-bottom: 0.5rem; */ /* Eliminado para que lo controle .form-field */
     display: block;
     width: 100%;
     padding: 0.75rem !important;
@@ -218,13 +213,13 @@ input[type="password"]::-webkit-password-reveal-button {
     display: none;
     max-height: 0;
     overflow: hidden;
-    transition: all 0.4s ease-out;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin 0.4s ease-out;
     opacity: 0;
-    margin-bottom: 0; /* Oculto no ocupa espacio */
+    /* Anula el espaciado de Tailwind cuando está oculto */
+    margin-top: 0 !important;
 }
 .conditional-field.visible {
     display: block;
     max-height: 15rem; 
     opacity: 1;
-    margin-bottom: 1rem; /* Visible sí ocupa espacio */
 }
