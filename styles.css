@@ -42,6 +42,7 @@ body {
     flex-grow: 1; 
     flex-direction: column; 
 }
+/* **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**: Esta regla es la que hace visible cada pantalla. */
 .screen.active { 
     display: flex; 
 }
@@ -149,12 +150,6 @@ body {
     overflow-y: auto; 
     background-color: #ffffff; 
 }
-
-/* **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**: Regla simple para el espaciado. */
-.form-field + .form-field {
-    margin-top: 1rem;
-}
-
 .form-field-invalid label {
     color: #c53030;
     font-weight: bold;
