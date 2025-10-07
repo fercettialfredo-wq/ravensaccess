@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', () => {
             currentUser = {};
             sessionStorage.removeItem('currentUser');
-            passwordInput.value = ''; // Limpia la contraseña
+            passwordInput.value = '';
             showScreen(SCREENS.LOGIN);
         });
     }
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Nombre', type: 'text' }, 
             { label: 'Torre', type: 'text' }, 
             { label: 'Departamento', type: 'text' },
-            { label: 'Motivo', type: 'text' } // Añadido
+            { label: 'Motivo', type: 'text' }
         ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
         'Personal de servicio': [
@@ -289,7 +289,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errData = await response.json();
                 throw new Error(errData.message || 'Error en el servidor');
             }
-            showConfirmationPopup();
+
+            // **AQUÍ ESTÁ EL CAMBIO**
+            switch (formId) {
+                case 'Eliminar QR':
+                    showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
+                    break;
+                case 'Incidencias':
+                    showConfirmationPopup('Incidencia Reportada', 'Gracias por tu reporte, le daremos seguimiento.');
+                    break;
+                default:
+                    showConfirmationPopup('Acceso Registrado', '¡Guardado! Haremos llegar el código QR a su WhatsApp.');
+                    break;
+            }
 
         } catch (error) {
             console.error("Error al enviar datos:", error);
@@ -301,8 +313,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function showConfirmationPopup() {
-        if (popup) popup.style.display = 'flex';
+    // **AQUÍ ESTÁ EL CAMBIO**
+    function showConfirmationPopup(title, message) {
+        if (popup) {
+            popup.querySelector('h3').textContent = title;
+            popup.querySelector('p').textContent = message;
+            popup.style.display = 'flex';
+        }
     }
 
     if (okBtn) {
