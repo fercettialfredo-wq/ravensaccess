@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loginButton.textContent = 'Verificando...';
 
             try {
-                // Guardamos el usuario actual en sessionStorage para persistir la sesión
                 const loginData = { action: 'login', username, password };
                 const response = await fetch(CONFIG.API_URL, {
                     method: 'POST',
@@ -82,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 currentUser = { username: username, condominio: data.condominio };
-                sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Guardar sesión
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); 
                 
                 if (rememberMeCheckbox.checked) {
                     localStorage.setItem('rememberedUser', username);
@@ -111,12 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- AQUÍ ESTÁ LA NUEVA LÓGICA DE LOGOUT ---
+    // --- LÓGICA DE LOGOUT (CON CORRECCIÓN) ---
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             currentUser = {};
             sessionStorage.removeItem('currentUser'); // Limpiar la sesión
             showScreen(SCREENS.LOGIN); // Volver al login
+            
+            // **AQUÍ ESTÁ LA CORRECCIÓN**: Borra el campo de contraseña
+            passwordInput.value = '';
         });
     }
 
@@ -131,13 +133,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- DEFINICIÓN DE FORMULARIOS ---
+    // --- DEFINICIÓN DE FORMULARIOS (CON CAMPO "RELACIÓN") ---
     const formDefinitions = {
-        'Residente': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
+        'Residente': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' },
+            { label: 'Relación', type: 'text' } // Añadido
+        ],
         'Visita': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
         'Personal de servicio': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }],
-        'Eliminar QR': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }],
+        'Eliminar QR': [
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Relación', type: 'text' }, // Añadido
+            { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }
+        ],
         'Incidencias': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Incidencia', type: 'text' }]
     };
 
@@ -259,6 +272,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Se llama al inicio para ver si hay una sesión activa
     checkSession();
 });
