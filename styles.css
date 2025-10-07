@@ -175,6 +175,7 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
+/* **AQUÍ ESTÁ EL ÚNICO CAMBIO**: añadido "textarea" para consistencia visual */
 input, select, textarea { 
     border-color: #cbd5e1 !important; 
     color: #1f2937 !important; 
