@@ -1,4 +1,4 @@
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
         // IMPORTANTE: Apunta a tu "proxy" en el servidor para proteger la API key.
@@ -158,11 +158,11 @@
             fieldsHtml += `<div class="${containerClasses}" data-conditional-id="${field.conditionalId || ''}" data-conditional-value="${field.conditionalValue || ''}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
-        // CORRECCIÓN: Eliminada la clase "space-y-4" del <form> para evitar conflictos.
+        // CORRECCIÓN: Se restauró la clase "space-y-4" para que Tailwind maneje el espaciado.
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"><h2 class="form-title">${formId}</h2><div class="home-icon cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg></div></div>
-            <div class="form-container"><form novalidate>${fieldsHtml}<div class="mt-8"><button type="submit" class="btn-save py-3">Guardar</button></div><p class="form-error text-red-600 text-sm text-center hidden mt-2"></p></form></div>`;
+            <div class="form-container"><form class="space-y-4" novalidate>${fieldsHtml}<div class="mt-8"><button type="submit" class="btn-save py-3">Guardar</button></div><p class="form-error text-red-600 text-sm text-center hidden mt-2"></p></form></div>`;
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
