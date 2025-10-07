@@ -42,6 +42,7 @@ body {
     flex-grow: 1; 
     flex-direction: column; 
 }
+/* **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**: Esta regla hace que las pantallas sean visibles. */
 .screen.active { 
     display: flex; 
 }
