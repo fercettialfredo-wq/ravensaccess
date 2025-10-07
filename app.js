@@ -123,13 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Fecha Fin', type: 'date', conditionalId: 'tipo-personal', conditionalValue: 'Eventual' }
         ],
         'Eliminar QR': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }],
-        // **AQUÍ ESTÁ TU CAMBIO**: Añadido "Nivel de Urgencia" y "textarea".
+        // **AQUÍ ESTÁ EL CAMBIO QUE PEDISTE**
         'Incidencias': [
             { label: 'Nombre', type: 'text' }, 
             { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' },
-            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] },
-            { label: 'Incidencia', type: 'textarea' }
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, // Añadido
+            { label: 'Incidencia', type: 'textarea' } // Mejorado
         ]
     };
 
@@ -148,9 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option>${opt}</option>`).join('');
                 inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">${optionsHtml}</select>`;
-            } else if (field.type === 'textarea') { // Añadido para el campo de incidencia
+            } else if (field.type === 'textarea') { // Añadido para soportar el campo de incidencia
                 inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2" rows="4"></textarea>`;
-            } else {
+            }
+            else {
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2">`;
             }
             
@@ -287,7 +288,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showScreen(SCREENS.LOGIN);
 });
-
-    main();
-});
-
