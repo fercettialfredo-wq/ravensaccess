@@ -42,7 +42,6 @@ body {
     flex-grow: 1; 
     flex-direction: column; 
 }
-/* **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**: Esta regla es la que hace visible cada pantalla. */
 .screen.active { 
     display: flex; 
 }
@@ -209,7 +208,7 @@ input[type="password"]::-webkit-password-reveal-button {
     -webkit-appearance: none;
 }
 
-/* --- ESTILOS PARA CAMPOS CONDICIONALES (VERSIÓN FINAL Y ESTABLE) --- */
+/* --- ESTILOS PARA CAMPOS CONDICIONALES --- */
 .conditional-field {
     display: none;
 }
