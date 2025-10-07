@@ -149,6 +149,12 @@ body {
     overflow-y: auto; 
     background-color: #ffffff; 
 }
+
+/* **LA CORRECCIÓN CLAVE ESTÁ AQUÍ**: Regla simple para el espaciado. */
+.form-field + .form-field {
+    margin-top: 1rem;
+}
+
 .form-field-invalid label {
     color: #c53030;
     font-weight: bold;
