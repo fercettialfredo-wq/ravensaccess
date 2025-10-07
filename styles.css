@@ -14,14 +14,13 @@ body {
     flex-direction: column; 
     background-color: #000000; 
 }
-/* AQUÍ ESTÁ EL CAMBIO DE ESPACIADO */
 .header-app { 
     background-color: #000000; 
     color: white; 
     padding: 1rem 1.5rem; 
     display: flex; 
     align-items: center; 
-    justify-content: space-between; /* Esto separa los elementos */
+    justify-content: space-between;
     flex-shrink: 0; 
 }
 .header-logo { 
@@ -176,11 +175,13 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
-input, select { 
+/* Cambio aquí para incluir textarea */
+input, select, textarea { 
     border-color: #cbd5e1 !important; 
     color: #1f2937 !important; 
 }
-input:focus, select:focus { 
+/* Cambio aquí para incluir textarea */
+input:focus, select:focus, textarea:focus { 
     --tw-ring-color: #5a1a2e !important; 
     border-color: #5a1a2e !important; 
 }
@@ -192,9 +193,10 @@ input[type="password"] {
     height: 64px;  
 }
 
-/* --- CÓDIGO AÑADIDO PARA OCULTAR EL OJO DEL NAVEGADOR --- */
-/* Oculta el ojo que el navegador añade por defecto */
 input[type="password"]::-webkit-password-reveal-button {
     display: none;
     -webkit-appearance: none;
 }
+
+/* ÚNICA LÍNEA AÑADIDA PARA LA FUNCIONALIDAD DE FECHAS */
+.conditional-field { display: none; }
