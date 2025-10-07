@@ -208,18 +208,16 @@ input[type="password"]::-webkit-password-reveal-button {
     -webkit-appearance: none;
 }
 
-/* --- ESTILOS PARA CAMPOS CONDICIONALES (CORREGIDOS) --- */
+/* --- ESTILOS PARA CAMPOS CONDICIONALES (CORREGIDOS Y SIMPLIFICADOS) --- */
 .conditional-field {
     display: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin 0.4s ease-out;
-    opacity: 0;
-    /* Anula el espaciado de Tailwind cuando está oculto */
-    margin-top: 0 !important;
 }
 .conditional-field.visible {
     display: block;
-    max-height: 15rem; 
-    opacity: 1;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
