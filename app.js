@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        API_URL: 'https://appvalidar.azurewebsites.net/api/processFormData?code=diC_fsfHBzDhxSQajupH-Vr78Lh6W2JA6R59VJlQo1cFAzFu4ly9RQ=='
+        // **AQUÍ ESTÁ EL CAMBIO**
+        // Ahora apunta a una ruta local en tu servidor que actuará como proxy.
+        API_PROXY_URL: '/api/ravens-proxy' 
     };
 
     const SCREENS = {
@@ -69,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const loginData = { action: 'login', username, password };
-                const response = await fetch(CONFIG.API_URL, {
+                const response = await fetch(CONFIG.API_PROXY_URL, { // Usando el proxy
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(loginData)
@@ -133,47 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DEFINICIÓN DE FORMULARIOS ---
     const formDefinitions = {
-        'Residente': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' },
-            { label: 'Relación', type: 'text' }
-        ],
-        'Visita': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' },
-            { label: 'Motivo', type: 'text' }
-        ],
+        'Residente': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' },{ label: 'Relación', type: 'text' } ],
+        'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
-        'Personal de servicio': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Cargo', type: 'text' },
-            { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
-            { label: 'Fecha Inicio', type: 'date', isConditional: true },
-            { label: 'Fecha Fin', type: 'date', isConditional: true }
-        ],
-        'Eliminar QR': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Relación', type: 'text' },
-            { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' }
-        ],
-        'Incidencias': [
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] },
-            { label: 'Incidencia', type: 'textarea' }
-        ]
+        'Personal de servicio': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }, { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' }, { label: 'Fecha Inicio', type: 'date', isConditional: true }, { label: 'Fecha Fin', type: 'date', isConditional: true } ],
+        'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' } ],
+        'Incidencias': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, { label: 'Incidencia', type: 'textarea' } ]
     };
 
     function generateFormContent(formPage) {
         formPage.innerHTML = ''; 
-
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
         let fieldsHtml = '';
@@ -193,28 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const conditionalClass = field.isConditional ? 'conditional-field' : '';
-
             fieldsHtml += `<div class="${conditionalClass}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
-            <div class="form-title-section">
-                <h2 class="form-title">${formId}</h2>
-                <div class="home-icon cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
-                </div>
-            </div>
-            <div class="form-container">
-                <form class="space-y-4">
-                    ${fieldsHtml}
-                    <div class="mt-8">
-                        <button type="submit" class="btn-save py-3">Guardar</button>
-                    </div>
-                    <p class="form-error text-red-600 text-sm text-center hidden mt-2"></p>
-                </form>
-            </div>
-        `;
+            <div class="form-title-section"> <h2 class="form-title">${formId}</h2> <div class="home-icon cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg> </div> </div>
+            <div class="form-container"> <form class="space-y-4"> ${fieldsHtml} <div class="mt-8"> <button type="submit" class="btn-save py-3">Guardar</button> </div> <p class="form-error text-red-600 text-sm text-center hidden mt-2"></p> </form> </div>`;
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
@@ -224,9 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupConditionalFields(formPage) {
         const trigger = formPage.querySelector('#tipo-personal');
         const conditionalFields = formPage.querySelectorAll('.conditional-field');
-
         if (!trigger || conditionalFields.length === 0) return;
-
         const updateVisibility = () => {
             const shouldBeVisible = trigger.value === 'Eventual';
             conditionalFields.forEach(field => {
@@ -249,7 +203,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
-
         errorP.classList.add('hidden');
         
         const data = {
@@ -280,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveButton.textContent = 'Guardando...';
 
         try {
-            const response = await fetch(CONFIG.API_URL, {
+            const response = await fetch(CONFIG.API_PROXY_URL, { // Usando el proxy
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -289,8 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errData = await response.json();
                 throw new Error(errData.message || 'Error en el servidor');
             }
-
-            // **AQUÍ ESTÁ EL CAMBIO**
             switch (formId) {
                 case 'Eliminar QR':
                     showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
@@ -302,7 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     showConfirmationPopup('Acceso Registrado', '¡Guardado! Haremos llegar el código QR a su WhatsApp.');
                     break;
             }
-
         } catch (error) {
             console.error("Error al enviar datos:", error);
             errorP.textContent = "Hubo un error al guardar los datos.";
@@ -313,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // **AQUÍ ESTÁ EL CAMBIO**
     function showConfirmationPopup(title, message) {
         if (popup) {
             popup.querySelector('h3').textContent = title;
