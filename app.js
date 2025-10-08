@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const CONFIG = {
         // **AQUÍ ESTÁ EL CAMBIO**
         // Ahora apunta a una ruta local en tu servidor que actuará como proxy.
-        API_PROXY_URL: '/api/ravens-proxy' 
+        API_PROXY_URL: 'https://proxyy.azurewebsites.net/api/ravens-proxy' 
     };
 
     const SCREENS = {
@@ -287,3 +287,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+
