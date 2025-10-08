@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        // **AQUÍ ESTÁ EL CAMBIO**
-        // Ahora apunta a una ruta local en tu servidor que actuará como proxy.
         API_PROXY_URL: 'https://proxyy.azurewebsites.net/api/ravens-proxy' 
     };
 
@@ -287,4 +285,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+
 
