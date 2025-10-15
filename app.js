@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 const loginData = { action: 'login', username, password };
-                const response = await fetch(CONFIG.API_PROXY_URL, { // Usando el proxy
+                const response = await fetch(CONFIG.API_PROXY_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(loginData)
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
         'Personal de servicio': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }, { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' }, { label: 'Fecha Inicio', type: 'date', isConditional: true }, { label: 'Fecha Fin', type: 'date', isConditional: true } ],
-        'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre QR' } ],
+        'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' } ], // Corregido
         'Incidencias': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, { label: 'Incidencia', type: 'textarea' } ]
     };
 
@@ -154,21 +154,22 @@ document.addEventListener('DOMContentLoaded', () => {
             let inputHtml = '';
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option>${opt}</option>`).join('');
-                inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">${optionsHtml}</select>`;
+                inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="input-field">${optionsHtml}</select>`;
             } else if (field.type === 'textarea') {
-                inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2" rows="4"></textarea>`;
+                inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="input-field" rows="4"></textarea>`;
             } else {
-                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
+                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="input-field">`;
             }
             
+            // **AQUÍ ESTÁ EL CAMBIO**: Añadimos una clase 'form-field' a todos los divs
             const conditionalClass = field.isConditional ? 'conditional-field' : '';
-            fieldsHtml += `<div class="${conditionalClass}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
+            fieldsHtml += `<div class="form-field ${conditionalClass}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"> <h2 class="form-title">${formId}</h2> <div class="home-icon cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg> </div> </div>
-            <div class="form-container"> <form class="space-y-4"> ${fieldsHtml} <div class="mt-8"> <button type="submit" class="btn-save py-3">Guardar</button> </div> <p class="form-error text-red-600 text-sm text-center hidden mt-2"></p> </form> </div>`;
+            <div class="form-container"> <form> ${fieldsHtml} <div class="mt-8"> <button type="submit" class="btn-save py-3">Guardar</button> </div> <p class="form-error text-red-600 text-sm text-center hidden mt-2"></p> </form> </div>`;
         
         formPage.querySelector('.home-icon').addEventListener('click', () => showScreen(SCREENS.MENU));
         formPage.querySelector('form').addEventListener('submit', handleFormSubmit);
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
             conditionalFields.forEach(field => {
                 field.style.display = shouldBeVisible ? 'block' : 'none';
                 if (!shouldBeVisible) {
-                    const input = field.querySelector('input');
+                    const input = field.querySelector('.input-field');
                     if (input) input.value = '';
                 }
             });
@@ -198,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const form = event.target;
         const formPage = form.closest('.form-page');
         const formId = formPage.dataset.formId;
-        const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
+        const inputs = form.querySelectorAll('.input-field');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
         errorP.classList.add('hidden');
@@ -212,7 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            const fieldContainer = input.closest('div');
+            // **AQUÍ ESTÁ EL CAMBIO**: Usamos la clase específica 'form-field'
+            const fieldContainer = input.closest('.form-field');
             if (fieldContainer.style.display !== 'none') {
                 data[input.dataset.field] = input.value.trim();
                 if (!input.value.trim()) {
@@ -231,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveButton.textContent = 'Guardando...';
 
         try {
-            const response = await fetch(CONFIG.API_PROXY_URL, { // Usando el proxy
+            const response = await fetch(CONFIG.API_PROXY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -285,6 +287,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-
-
-
