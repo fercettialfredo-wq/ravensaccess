@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const dataField = field.field || field.label;
             
             let inputHtml = '';
-            // **AQUÍ ESTÁ LA CORRECCIÓN VISUAL**: Restauradas las clases originales de los inputs
             if (field.type === 'select') {
                 const optionsHtml = field.options.map(opt => `<option>${opt}</option>`).join('');
                 inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">${optionsHtml}</select>`;
@@ -163,11 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             const conditionalClass = field.isConditional ? 'conditional-field' : '';
-            // **AQUÍ ESTÁ LA CORRECCIÓN VISUAL**: Se genera un `div` simple para cada campo.
             fieldsHtml += `<div class="${conditionalClass}"><label for="${fieldId}" class="block font-bold text-gray-700">${field.label}</label>${inputHtml}</div>`;
         });
         
-        // **AQUÍ ESTÁ LA CORRECCIÓN VISUAL**: Se restaura la clase `space-y-4` en el <form>
         formPage.innerHTML = `
             <header class="header-app"><div class="header-logo"><img src="./icons/logo.png" alt="Ravens Logo"><span class="header-logo-text">RAVENS ACCESS</span></div></header>
             <div class="form-title-section"> <h2 class="form-title">${formId}</h2> <div class="home-icon cursor-pointer"> <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg> </div> </div>
@@ -215,16 +212,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            // **AQUÍ ESTÁ LA CORRECCIÓN DE LA VALIDACIÓN**
             const fieldContainer = input.closest('div');
-            // Solo validamos el campo si su contenedor es visible
-            if (fieldContainer && fieldContainer.style.display !== 'none') {
+            // **AQUÍ ESTÁ LA CORRECCIÓN DE LA VALIDACIÓN**
+            // Solo validamos si el campo es visible
+            if (fieldContainer.style.display !== 'none') {
                 if (!input.value.trim()) {
                     allFieldsValid = false;
                 }
+                // Y solo recolectamos el dato si es visible
+                data[input.dataset.field] = input.value.trim();
             }
-            // Siempre recolectamos el dato, pero solo validamos los visibles
-            data[input.dataset.field] = input.value.trim();
         });
 
         if (!allFieldsValid) {
