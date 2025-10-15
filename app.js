@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
@@ -193,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisibility();
     }
 
+    // **AQUÍ ESTÁ LA CORRECCIÓN DEFINITIVA**
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -213,19 +215,21 @@ document.addEventListener('DOMContentLoaded', () => {
         let allFieldsValid = true;
         inputs.forEach(input => {
             const fieldContainer = input.closest('div');
-            // **AQUÍ ESTÁ LA CORRECCIÓN DE LA VALIDACIÓN**
-            // Solo validamos si el campo es visible
+            
+            // La lógica correcta:
+            // 1. Revisa si el contenedor del campo está visible
             if (fieldContainer.style.display !== 'none') {
+                // 2. Si es visible, su valor no puede estar vacío
                 if (!input.value.trim()) {
                     allFieldsValid = false;
                 }
-                // Y solo recolectamos el dato si es visible
+                // 3. Si es visible, añade su dato al paquete que se enviará
                 data[input.dataset.field] = input.value.trim();
             }
         });
 
         if (!allFieldsValid) {
-            errorP.textContent = "Por favor, rellena todos los campos.";
+            errorP.textContent = "Por favor, rellena todos los campos visibles.";
             errorP.classList.remove('hidden');
             return;
         }
