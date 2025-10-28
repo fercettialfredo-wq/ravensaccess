@@ -175,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupConditionalFields(formPage);
     }
     
+    // **ESTA FUNCIÓN AHORA USA CLASES CSS**
     function setupConditionalFields(formPage) {
         const trigger = formPage.querySelector('#tipo-personal');
         const conditionalFields = formPage.querySelectorAll('.conditional-field');
@@ -182,11 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateVisibility = () => {
             const shouldBeVisible = trigger.value === 'Eventual';
             conditionalFields.forEach(field => {
-                // **CORRECCIÓN**: Usamos la clase CSS en lugar de style.display
                 if (shouldBeVisible) {
-                    field.classList.add('visible');
+                    field.classList.add('visible'); // Muestra usando la clase
                 } else {
-                    field.classList.remove('visible');
+                    field.classList.remove('visible'); // Oculta quitando la clase
                     const input = field.querySelector('input');
                     if (input) input.value = '';
                 }
@@ -215,14 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            const fieldContainer = input.closest('div'); // El div contenedor
+            const fieldContainer = input.closest('div'); 
             const isConditional = fieldContainer.classList.contains('conditional-field');
-            const isVisible = !isConditional || fieldContainer.classList.contains('visible'); // Es visible si NO es condicional O si tiene la clase 'visible'
+            const isVisible = !isConditional || fieldContainer.classList.contains('visible'); // Revisa si tiene la clase 'visible'
 
             const currentValue = input.value.trim();
-            data[input.dataset.field] = currentValue; // Siempre recolecta el dato
+            data[input.dataset.field] = currentValue; 
 
-            // Valida SOLO si es visible y está vacío
             if (isVisible && !currentValue) {
                 allFieldsValid = false;
             }
@@ -231,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!allFieldsValid) {
             errorP.textContent = "Por favor, rellena todos los campos visibles.";
             errorP.classList.remove('hidden');
-            return;
+            return; 
         }
         
         saveButton.disabled = true;
