@@ -193,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisibility();
     }
 
-    // **AQUÍ ESTÁ LA CORRECCIÓN DEFINITIVA**
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -202,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
-        errorP.classList.add('hidden');
+        errorP.classList.add('hidden'); // Oculta el mensaje de error al inicio
         
         const data = {
             action: 'submit_form',
@@ -216,21 +215,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const fieldContainer = input.closest('div'); // Encuentra el div contenedor del input
             const isVisible = fieldContainer.style.display !== 'none'; // Revisa si ese div está visible
 
-            // Recolecta el dato SIEMPRE, para que no falte información si el campo está oculto pero tiene valor
-            data[input.dataset.field] = input.value.trim();
+            // Recolecta el dato del campo actual
+            const currentValue = input.value.trim();
+            data[input.dataset.field] = currentValue; // Guardamos el valor esté o no visible
 
             // Valida el campo SOLO si es visible
-            if (isVisible && !input.value.trim()) {
+            if (isVisible && !currentValue) { // Si es visible y está vacío
                 allFieldsValid = false;
             }
         });
 
+        // **AQUÍ ESTÁ LA CORRECCIÓN**: Muestra el mensaje si falla la validación
         if (!allFieldsValid) {
             errorP.textContent = "Por favor, rellena todos los campos visibles.";
             errorP.classList.remove('hidden');
             return; // Detiene el envío si un campo visible está vacío
         }
         
+        // Si la validación pasa, continúa con el envío...
         saveButton.disabled = true;
         saveButton.textContent = 'Guardando...';
 
