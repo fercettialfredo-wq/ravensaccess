@@ -182,8 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateVisibility = () => {
             const shouldBeVisible = trigger.value === 'Eventual';
             conditionalFields.forEach(field => {
-                field.style.display = shouldBeVisible ? 'block' : 'none';
-                if (!shouldBeVisible) {
+                // **CORRECCIÓN**: Usamos la clase CSS en lugar de style.display
+                if (shouldBeVisible) {
+                    field.classList.add('visible');
+                } else {
+                    field.classList.remove('visible');
                     const input = field.querySelector('input');
                     if (input) input.value = '';
                 }
@@ -201,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
-        errorP.classList.add('hidden'); // Oculta el mensaje de error al inicio
+        errorP.classList.add('hidden');
         
         const data = {
             action: 'submit_form',
@@ -212,27 +215,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            const fieldContainer = input.closest('div'); // Encuentra el div contenedor del input
-            const isVisible = fieldContainer.style.display !== 'none'; // Revisa si ese div está visible
+            const fieldContainer = input.closest('div'); // El div contenedor
+            const isConditional = fieldContainer.classList.contains('conditional-field');
+            const isVisible = !isConditional || fieldContainer.classList.contains('visible'); // Es visible si NO es condicional O si tiene la clase 'visible'
 
-            // Recolecta el dato del campo actual
             const currentValue = input.value.trim();
-            data[input.dataset.field] = currentValue; // Guardamos el valor esté o no visible
+            data[input.dataset.field] = currentValue; // Siempre recolecta el dato
 
-            // Valida el campo SOLO si es visible
-            if (isVisible && !currentValue) { // Si es visible y está vacío
+            // Valida SOLO si es visible y está vacío
+            if (isVisible && !currentValue) {
                 allFieldsValid = false;
             }
         });
 
-        // **AQUÍ ESTÁ LA CORRECCIÓN**: Muestra el mensaje si falla la validación
         if (!allFieldsValid) {
             errorP.textContent = "Por favor, rellena todos los campos visibles.";
             errorP.classList.remove('hidden');
-            return; // Detiene el envío si un campo visible está vacío
+            return;
         }
         
-        // Si la validación pasa, continúa con el envío...
         saveButton.disabled = true;
         saveButton.textContent = 'Guardando...';
 
