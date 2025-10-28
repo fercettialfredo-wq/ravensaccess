@@ -213,24 +213,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let allFieldsValid = true;
         inputs.forEach(input => {
-            const fieldContainer = input.closest('div');
-            
-            // La lógica correcta:
-            // 1. Revisa si el contenedor del campo está visible
-            if (fieldContainer.style.display !== 'none') {
-                // 2. Si es visible, su valor no puede estar vacío
-                if (!input.value.trim()) {
-                    allFieldsValid = false;
-                }
-                // 3. Si es visible, añade su dato al paquete que se enviará
-                data[input.dataset.field] = input.value.trim();
+            const fieldContainer = input.closest('div'); // Encuentra el div contenedor del input
+            const isVisible = fieldContainer.style.display !== 'none'; // Revisa si ese div está visible
+
+            // Recolecta el dato SIEMPRE, para que no falte información si el campo está oculto pero tiene valor
+            data[input.dataset.field] = input.value.trim();
+
+            // Valida el campo SOLO si es visible
+            if (isVisible && !input.value.trim()) {
+                allFieldsValid = false;
             }
         });
 
         if (!allFieldsValid) {
             errorP.textContent = "Por favor, rellena todos los campos visibles.";
             errorP.classList.remove('hidden');
-            return;
+            return; // Detiene el envío si un campo visible está vacío
         }
         
         saveButton.disabled = true;
