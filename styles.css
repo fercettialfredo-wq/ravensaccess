@@ -175,12 +175,10 @@ body {
     background-color: #9ca3af;
     cursor: not-allowed;
 }
-/* Cambio aquí para incluir textarea */
 input, select, textarea { 
     border-color: #cbd5e1 !important; 
     color: #1f2937 !important; 
 }
-/* Cambio aquí para incluir textarea */
 input:focus, select:focus, textarea:focus { 
     --tw-ring-color: #5a1a2e !important; 
     border-color: #5a1a2e !important; 
@@ -198,5 +196,10 @@ input[type="password"]::-webkit-password-reveal-button {
     -webkit-appearance: none;
 }
 
-/* ÚNICA LÍNEA AÑADIDA PARA LA FUNCIONALIDAD DE FECHAS */
-.conditional-field { display: none; }
+/* **ESTAS SON LAS CLASES NECESARIAS** */
+.conditional-field { 
+    display: none; 
+}
+.conditional-field.visible {
+    display: block;
+}
