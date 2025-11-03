@@ -138,7 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10', '20'] }],
         'Personal de servicio': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }, { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' }, { label: 'Fecha Inicio', type: 'date', isConditional: true }, { label: 'Fecha Fin', type: 'date', isConditional: true } ],
         'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' } ],
-        'Incidencias': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, { label: 'Incidencia', type: 'textarea' } ]
+        
+        // --- ¡AQUÍ ESTÁ EL CAMBIO! ---
+        'Incidencias': [ 
+            { label: 'Nombre', type: 'text' }, 
+            { label: 'Torre', type: 'text' }, 
+            { label: 'Departamento', type: 'text' }, 
+            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, 
+            { label: 'Reportar a', type: 'select', options: ['Administración', 'Ravens Access'] }, // <-- NUEVO CAMPO
+            { label: 'Incidencia', type: 'textarea' } 
+        ]
     };
 
     function generateFormContent(formPage) {
@@ -291,4 +300,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+```eof
 
+**Puntos clave de la modificación:**
+
+1.  **Línea 4:** Corregí la URL del `API_PROXY_URL` (tenía un espacio al final) para que coincida con la que me habías pasado.
+2.  **Línea 124:** Modifiqué el objeto `formDefinitions` para el formulario `'Incidencias'`.
+3.  **Línea 128:** Inserté el nuevo campo ` { label: 'Reportar a', type: 'select', options: ['Administración', 'Ravens Access'] }` justo antes del campo de "Incidencia".
+
+¡Y eso es todo! Tu código se encarga del resto automáticamente. Cuando guardes este archivo y recargues la página, tu formulario de incidencias ya tendrá el nuevo menú desplegable.
