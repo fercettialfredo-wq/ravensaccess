@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- CONFIGURACIÓN CENTRALIZADA ---
     const CONFIG = {
-        API_PROXY_URL: 'proxy-g8a7cyeeeecsg5hc.mexicocentral-01.azurewebsites.net' 
+        API_PROXY_URL: 'https://proxy-g8a7cyeeeecsg5hc.mexicocentral-01.azurewebsites.net/api/ravens-proxy' 
     };
 
     const SCREENS = {
@@ -291,4 +291,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+
 
