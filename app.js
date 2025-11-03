@@ -291,4 +291,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-oye y le puedes modificar para que en la incidencia se agrege un menu desplegable donde el residente elige si la incidencia es para la administracion o para ravens access
