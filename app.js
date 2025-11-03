@@ -301,11 +301,3 @@ document.addEventListener('DOMContentLoaded', () => {
     checkSession();
 });
 ```eof
-
-**Puntos clave de la modificación:**
-
-1.  **Línea 4:** Corregí la URL del `API_PROXY_URL` (tenía un espacio al final) para que coincida con la que me habías pasado.
-2.  **Línea 124:** Modifiqué el objeto `formDefinitions` para el formulario `'Incidencias'`.
-3.  **Línea 128:** Inserté el nuevo campo ` { label: 'Reportar a', type: 'select', options: ['Administración', 'Ravens Access'] }` justo antes del campo de "Incidencia".
-
-¡Y eso es todo! Tu código se encarga del resto automáticamente. Cuando guardes este archivo y recargues la página, tu formulario de incidencias ya tendrá el nuevo menú desplegable.
