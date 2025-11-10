@@ -42,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE LOGIN ---
 
-    // **ESTA LÓGICA AHORA ESTÁ AFUERA, EN EL LUGAR CORRECTO**
-    // Carga el usuario recordado (si existe) en cuanto carga la página.
     const rememberedUser = localStorage.getItem('rememberedUser');
     if (rememberedUser && usernameInput) {
         usernameInput.value = rememberedUser;
@@ -84,9 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 currentUser = { username: username, condominio: data.condominio };
-                sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); 
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));    
                 
-                // Esta lógica es correcta: si está marcado, guarda. Si no, borra.
                 if (rememberMeCheckbox.checked) {
                     localStorage.setItem('rememberedUser', username);
                 } else {
@@ -140,7 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
         'Residente': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' },{ label: 'Relación', type: 'text' } ],
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10'] }],
-        'Personal de servicio': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Cargo', type: 'text' }, { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' }, { label: 'Fecha Inicio', type: 'date', isConditional: true }, { label: 'Fecha Fin', type: 'date', isConditional: true } ],
+        'Personal de servicio': [
+            { label: 'Nombre', type: 'text' },
+            { label: 'Torre', type: 'text' },
+            { label: 'Departamento', type: 'text' },
+            { label: 'Cargo', type: 'text' },
+            { label: 'Foto', type: 'file', field: 'Foto' }, // <-- CAMBIO 1: AÑADIDO
+            { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
+            { label: 'Fecha Inicio', type: 'date', isConditional: true },
+            { label: 'Fecha Fin', type: 'date', isConditional: true }
+        ],
         'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' } ],
         'Incidencias': [ 
             { label: 'Nombre', type: 'text' }, 
@@ -168,6 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 inputHtml = `<select id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">${optionsHtml}</select>`;
             } else if (field.type === 'textarea') {
                 inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2" rows="4"></textarea>`;
+            
+            // --- CAMBIO 2: AÑADIDO ELSE IF PARA 'FILE' ---
+            } else if (field.type === 'file') {
+                inputHtml = `<input type="file" id="${fieldId}" data-field="${dataField}" accept="image/*" capture="environment" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">`;
+            
             } else {
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
             }
@@ -206,6 +217,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisibility();
     }
 
+    // --- CAMBIO 3: NUEVA FUNCIÓN PARA LEER ARCHIVOS ---
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result); // Devuelve el string Base64
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // --- CAMBIO 4: FUNCIÓN handleFormSubmit ACTUALIZADA ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -223,39 +245,54 @@ document.addEventListener('DOMContentLoaded', () => {
             registradoPor: currentUser.username || 'No especificado'
         };
 
-        let allFieldsValid = true;
-        inputs.forEach(input => {
-            const fieldContainer = input.closest('div'); 
-            const isConditional = fieldContainer.classList.contains('conditional-field');
-            const isVisible = !isConditional || fieldContainer.classList.contains('visible');
-
-            const currentValue = input.value.trim();
-            data[input.dataset.field] = currentValue; 
-
-            if (isVisible && !currentValue) {
-                allFieldsValid = false;
-            }
-        });
-
-        if (!allFieldsValid) {
-            errorP.textContent = "Por favor, rellena todos los campos visibles.";
-            errorP.classList.remove('hidden');
-            return; 
-        }
-        
         saveButton.disabled = true;
         saveButton.textContent = 'Guardando...';
 
         try {
+            let allFieldsValid = true;
+
+            // Usamos un bucle for...of para poder usar 'await' adentro
+            for (const input of inputs) {
+                const fieldContainer = input.closest('div');
+                const isConditional = fieldContainer.classList.contains('conditional-field');
+                const isVisible = !isConditional || fieldContainer.classList.contains('visible');
+
+                if (input.type === 'file') {
+                    const file = input.files[0];
+                    if (file) {
+                        // Convertimos la imagen a Base64 y la añadimos a 'data'
+                        data[input.dataset.field] = await readFileAsBase64(file);
+                    } else if (isVisible) {
+                        // El campo de foto es visible pero no se seleccionó archivo
+                        // Si la foto NO es opcional, descomenta la siguiente línea:
+                        // allFieldsValid = false;
+                    }
+                } else {
+                    // Lógica para campos normales (texto, select, etc.)
+                    const currentValue = input.value.trim();
+                    data[input.dataset.field] = currentValue;
+                    if (isVisible && !currentValue) {
+                        allFieldsValid = false;
+                    }
+                }
+            }
+
+            if (!allFieldsValid) {
+                throw new Error("Por favor, rellena todos los campos visibles.");
+            }
+            
+            // Ahora 'data' contiene el string Base64 de la imagen
             const response = await fetch(CONFIG.API_PROXY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data) // El JSON ahora incluye la imagen
             });
+
             if (!response.ok) {
                 const errData = await response.json();
                 throw new Error(errData.message || 'Error en el servidor');
             }
+            
             switch (formId) {
                 case 'Eliminar QR':
                     showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
@@ -269,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error("Error al enviar datos:", error);
-            errorP.textContent = "Hubo un error al guardar los datos.";
+            errorP.textContent = error.message || "Hubo un error al guardar los datos.";
             errorP.classList.remove('hidden');
         } finally {
             saveButton.disabled = false;
@@ -301,4 +338,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-
