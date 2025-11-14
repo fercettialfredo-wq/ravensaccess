@@ -177,11 +177,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 'Puede Salir con' (Checkbox Group, sin 'Otros')
             { 
-                label: 'Puede Salir con', 
+                label: 'Puede salir con', 
                 type: 'checkbox-group', 
                 options: [
                     'Perros', 
-                    'Carros', 
+                    'Autos', 
                     'Niños'
                 ], 
                 field: 'Puede_Salir_Con' 
@@ -423,3 +423,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+
