@@ -144,27 +144,45 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Cargo', type: 'text' },
             { label: 'Foto', type: 'file', field: 'Foto' },
             
-            // CAMBIO 1: Horario ahora usa un selector de hora (type="time")
+            // Selector de Hora de Entrada
             { 
                 label: 'Hora de Entrada', 
                 type: 'time',
                 field: 'Hora_Entrada'
             },
+            // Selector de Hora de Salida
             { 
                 label: 'Hora de Salida', 
                 type: 'time',
                 field: 'Hora_Salida'
             },
+            
+            // 🔑 NUEVO CAMPO: Días de Trabajo (Checkbox Group)
+            { 
+                label: 'Días de Trabajo', 
+                type: 'checkbox-group', 
+                options: [
+                    'Lunes', 
+                    'Martes', 
+                    'Miércoles', 
+                    'Jueves', 
+                    'Viernes', 
+                    'Sábado', 
+                    'Domingo'
+                ], 
+                field: 'Dias_Trabajo' 
+            },
+
             { label: 'Requiere Revisión', type: 'select', options: ['SÍ', 'NO'], field: 'Requiere_Revision' },
             
-            // CAMBIO 2: 'Puede Salir con' sin opción 'Otros'
+            // 'Puede Salir con' (Checkbox Group, sin 'Otros')
             { 
                 label: 'Puede Salir con', 
                 type: 'checkbox-group', 
                 options: [
                     'Perros', 
                     'Carros', 
-                    'Niños' // Se eliminó 'Otros'
+                    'Niños'
                 ], 
                 field: 'Puede_Salir_Con' 
             },
@@ -217,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 inputHtml += `</div>`;
             } else {
-                // Incluye el tipo 'time' (selector de hora) aquí
+                // Incluye los tipos 'text', 'date' y 'time'
                 const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" ${placeholder} class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
             }
@@ -266,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNCIÓN handleFormSubmit ACTUALIZADA PARA CHECKBOXES Y VALOR POR DEFECTO ---
+    // --- FUNCIÓN handleFormSubmit ACTUALIZADA ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -307,8 +325,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         selectedOptions.push(checkbox.value);
                     });
                     
-                    // 🔑 LÓGICA CLAVE: Si no hay selecciones, se envía "Ninguno"
-                    data[dataField] = selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Ninguno';
+                    // LÓGICA CLAVE: Si no hay selecciones, se envía "Ninguno" (Solo aplica a 'Puede Salir con')
+                    // Para 'Dias_Trabajo', si no se selecciona nada, se enviará un string vacío o 'Ninguno' si se desea. 
+                    // Por simplicidad, aplicamos la lógica de 'Ninguno' si la lista está vacía solo para "Puede_Salir_Con".
+                    if (dataField === 'Puede_Salir_Con') {
+                        data[dataField] = selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Ninguno';
+                    } else {
+                        data[dataField] = selectedOptions.join(', ');
+                        if (selectedOptions.length === 0) {
+                            // Se asume que los Días de Trabajo son obligatorios si el campo es visible
+                            // Si Días de Trabajo puede ir vacío, elimina la siguiente línea
+                            // allFieldsValid = false; 
+                        }
+                    }
 
                 } else if (fieldDefinition.type === 'file') {
                     const fileInput = form.querySelector(`#${fieldId}`);
@@ -381,8 +410,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeForm.reset();
                 const trigger = activeForm.querySelector('#tipo-personal');
                 if (trigger) trigger.dispatchEvent(new Event('change'));
-                // Limpiar específicamente los checkboxes después de resetear
-                const checkboxGroups = activeForm.querySelectorAll('div[data-field="Puede_Salir_Con"] input[type="checkbox"]');
+                
+                // Limpiar checkboxes
+                const checkboxGroups = activeForm.querySelectorAll('input[type="checkbox"]');
                 checkboxGroups.forEach(checkbox => checkbox.checked = false);
 
                 activeForm.querySelector('.form-error').classList.add('hidden');
