@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- DEFINICIÓN DE FORMULARIOS (ACTUALIZADO) ---
+    // --- DEFINICIÓN DE FORMULARIOS (ACTUALIZADO CON SELECT Y CHECKBOXES) ---
     const formDefinitions = {
         'Residente': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' },{ label: 'Relación', type: 'text' } ],
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
@@ -144,10 +144,32 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Cargo', type: 'text' },
             { label: 'Foto', type: 'file', field: 'Foto' },
             
-            // CAMPOS NUEVOS:
-            { label: 'Horario', type: 'text', placeholder: 'Lunes a Viernes 10:00 a 15:00' }, 
+            // Horario como Lista Desplegable (selección única)
+            { 
+                label: 'Horario', 
+                type: 'select', 
+                options: [
+                    'Lunes a Viernes 8:00 a 17:00',
+                    'Lunes a Viernes 10:00 a 15:00',
+                    'Solo Sábados 8:00 a 13:00',
+                    'Otros - Ver Comentarios'
+                ],
+                field: 'Horario' 
+            }, 
             { label: 'Requiere Revisión', type: 'select', options: ['SÍ', 'NO'], field: 'Requiere_Revision' },
-            { label: 'Puede Salir con', type: 'text', placeholder: 'Perros, Carros, Niños' },
+            
+            // Puede Salir con como Grupo de Checkboxes (selección múltiple)
+            { 
+                label: 'Puede Salir con', 
+                type: 'checkbox-group', // Tipo personalizado para checkboxes
+                options: [
+                    'Perros', 
+                    'Carros', 
+                    'Niños',
+                    'Otros' 
+                ], 
+                field: 'Puede_Salir_Con' // Este campo almacenará los valores seleccionados
+            },
             
             { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
             { label: 'Fecha Inicio', type: 'date', isConditional: true },
@@ -184,6 +206,19 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (field.type === 'file') {
                 inputHtml = `<input type="file" id="${fieldId}" data-field="${dataField}" accept="image/*" capture="environment" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">`;
             
+            // Nueva lógica para renderizar 'checkbox-group'
+            } else if (field.type === 'checkbox-group') {
+                inputHtml = `<div id="${fieldId}" data-field="${dataField}" class="mt-1 space-y-2">`;
+                field.options.forEach((option, index) => {
+                    const checkboxId = `${fieldId}-${index}`;
+                    inputHtml += `
+                        <div class="flex items-center">
+                            <input type="checkbox" id="${checkboxId}" name="${fieldId}" value="${option}" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <label for="${checkboxId}" class="ml-2 block text-sm text-gray-900">${option}</label>
+                        </div>
+                    `;
+                });
+                inputHtml += `</div>`;
             } else {
                 const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
                 inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" ${placeholder} class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
@@ -233,13 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNCIÓN handleFormSubmit ACTUALIZADA ---
+    // --- FUNCIÓN handleFormSubmit ACTUALIZADA PARA CHECKBOXES ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
-        const formPage = form.closest('.form-page');
-        const formId = formPage.dataset.formId;
-        const inputs = form.querySelectorAll('input[data-field], select[data-field], textarea[data-field]');
+        const formId = form.closest('.form-page').dataset.formId;
         const saveButton = form.querySelector('.btn-save');
         const errorP = form.querySelector('.form-error');
         errorP.classList.add('hidden');
@@ -257,41 +290,68 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let allFieldsValid = true;
 
-            // Usamos un bucle for...of para poder usar 'await' adentro
-            for (const input of inputs) {
-                const fieldContainer = input.closest('div');
-                const isConditional = fieldContainer.classList.contains('conditional-field');
-                const isVisible = !isConditional || fieldContainer.classList.contains('visible');
+            // Iteramos sobre la definición del formulario para procesar cada tipo de campo
+            for (const fieldDefinition of formDefinitions[formId]) {
+                const dataField = fieldDefinition.field || fieldDefinition.label;
+                const fieldId = fieldDefinition.id || `${formId.toLowerCase().replace(/\s/g, '-')}-${fieldDefinition.label.toLowerCase().replace(/\s/g, '-')}`;
+                
+                // Intentamos encontrar el contenedor del campo. Para campos simples, puede ser el propio input.
+                // Para checkbox-group, es el div que contiene los checkboxes.
+                const fieldContainer = form.querySelector(`#${fieldId}`) ? form.querySelector(`#${fieldId}`).closest('div') : null;
+                const isConditional = fieldContainer ? fieldContainer.classList.contains('conditional-field') : false;
+                const isVisible = !isConditional || (fieldContainer && fieldContainer.classList.contains('visible'));
 
-                if (input.type === 'file') {
-                    const file = input.files[0];
+                if (!isVisible) {
+                    // Si el campo no es visible (por ser condicional y no aplica), lo ignoramos
+                    // Y nos aseguramos de no enviarlo si no tiene valor.
+                    continue; 
+                }
+
+                if (fieldDefinition.type === 'checkbox-group') {
+                    const selectedOptions = [];
+                    // Seleccionar solo los checkboxes dentro del grupo que están marcados
+                    const checkboxes = form.querySelectorAll(`input[name="${fieldId}"]:checked`);
+                    checkboxes.forEach(checkbox => {
+                        selectedOptions.push(checkbox.value);
+                    });
+                    // Unir los valores seleccionados con una coma para enviarlos como un solo string
+                    data[dataField] = selectedOptions.join(', '); 
+
+                    // Opcional: Validar si al menos una opción fue seleccionada
+                    // if (selectedOptions.length === 0) {
+                    //      allFieldsValid = false;
+                    // }
+                } else if (fieldDefinition.type === 'file') {
+                    const fileInput = form.querySelector(`#${fieldId}`);
+                    const file = fileInput ? fileInput.files[0] : null;
                     if (file) {
-                        // Convertimos la imagen a Base64 y la añadimos a 'data'
-                        data[input.dataset.field] = await readFileAsBase64(file);
+                        data[dataField] = await readFileAsBase64(file);
                     } else if (isVisible) {
-                        // El campo de foto es visible pero no se seleccionó archivo
-                        // Si la foto NO es opcional, descomenta la siguiente línea:
+                        // Si la foto NO es opcional y es visible, descomenta para validar
                         // allFieldsValid = false;
                     }
-                } else {
-                    // Lógica para campos normales (texto, select, etc.)
-                    const currentValue = input.value.trim();
-                    data[input.dataset.field] = currentValue;
-                    if (isVisible && !currentValue) {
+                }
+                else {
+                    // Para otros tipos de campos (text, select, textarea, date, etc.)
+                    const inputElement = form.querySelector(`#${fieldId}`);
+                    const currentValue = inputElement ? inputElement.value.trim() : '';
+                    data[dataField] = currentValue;
+
+                    // Validación básica: Si el campo está visible y vacío
+                    if (!currentValue && isVisible) { 
                         allFieldsValid = false;
                     }
                 }
             }
 
             if (!allFieldsValid) {
-                throw new Error("Por favor, rellena todos los campos visibles.");
+                throw new Error("Por favor, rellena todos los campos visibles y obligatorios.");
             }
             
-            // Ahora 'data' contiene el string Base64 de la imagen
             const response = await fetch(CONFIG.API_PROXY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data) // El JSON ahora incluye la imagen
+                body: JSON.stringify(data) 
             });
 
             if (!response.ok) {
@@ -336,6 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeForm.reset();
                 const trigger = activeForm.querySelector('#tipo-personal');
                 if (trigger) trigger.dispatchEvent(new Event('change'));
+                // Limpiar específicamente los checkboxes después de resetear
+                const checkboxGroups = activeForm.querySelectorAll('div[data-field="Puede_Salir_Con"] input[type="checkbox"]');
+                checkboxGroups.forEach(checkbox => checkbox.checked = false);
+
                 activeForm.querySelector('.form-error').classList.add('hidden');
             }
             showScreen(SCREENS.MENU);
