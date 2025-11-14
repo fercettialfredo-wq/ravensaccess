@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- DEFINICIÓN DE FORMULARIOS ---
+    // --- DEFINICIÓN DE FORMULARIOS (ACTUALIZADO) ---
     const formDefinitions = {
         'Residente': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' },{ label: 'Relación', type: 'text' } ],
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
@@ -142,7 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Torre', type: 'text' },
             { label: 'Departamento', type: 'text' },
             { label: 'Cargo', type: 'text' },
-            { label: 'Foto', type: 'file', field: 'Foto' }, // <-- CAMBIO 1: AÑADIDO
+            { label: 'Foto', type: 'file', field: 'Foto' },
+            
+            // CAMPOS NUEVOS:
+            { label: 'Horario', type: 'text', placeholder: 'Lunes a Viernes 10:00 a 15:00' }, 
+            { label: 'Requiere Revisión', type: 'select', options: ['SÍ', 'NO'], field: 'Requiere_Revision' },
+            { label: 'Puede Salir con', type: 'text', placeholder: 'Perros, Carros, Niños' },
+            
             { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
             { label: 'Fecha Inicio', type: 'date', isConditional: true },
             { label: 'Fecha Fin', type: 'date', isConditional: true }
@@ -175,12 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (field.type === 'textarea') {
                 inputHtml = `<textarea id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2" rows="4"></textarea>`;
             
-            // --- CAMBIO 2: AÑADIDO ELSE IF PARA 'FILE' ---
             } else if (field.type === 'file') {
                 inputHtml = `<input type="file" id="${fieldId}" data-field="${dataField}" accept="image/*" capture="environment" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">`;
             
             } else {
-                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
+                const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
+                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" ${placeholder} class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
             }
             
             const conditionalClass = field.isConditional ? 'conditional-field' : '';
@@ -217,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateVisibility();
     }
 
-    // --- CAMBIO 3: NUEVA FUNCIÓN PARA LEER ARCHIVOS ---
+    // --- NUEVA FUNCIÓN PARA LEER ARCHIVOS ---
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -227,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- CAMBIO 4: FUNCIÓN handleFormSubmit ACTUALIZADA ---
+    // --- FUNCIÓN handleFormSubmit ACTUALIZADA ---
     async function handleFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
