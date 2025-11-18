@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const SCREENS = {
         LOGIN: 'login-screen',
-        MENU: 'menu-screen'
+        MENU: 'menu-screen',
+        PROVEEDOR: 'proveedor-screen' // 🔑 CAMBIO 1: Nueva pantalla para Proveedor
     };
     
     // --- ESTADO DE LA APLICACIÓN ---
@@ -137,6 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
         'Residente': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' },{ label: 'Relación', type: 'text' } ],
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10'] }],
+        
+        // 🔑 CAMBIO 2: Nuevo Formulario 'Proveedor'
+        'Proveedor': [
+            { label: 'Nombre', type: 'text' },
+            { label: 'Torre', type: 'text' },
+            { label: 'Departamento', type: 'text' },
+            { label: 'Proveedor', type: 'text' },
+            { label: 'Número de WhatsApp', type: 'tel', field: 'Numero_WA' }, // Teléfono para el código
+            { label: 'Código (4 dígitos)', type: 'number', field: 'Codigo_4d', placeholder: 'Este código se envía por WhatsApp', min: '1000', max: '9999' }
+        ],
+        
         'Personal de servicio': [
             { label: 'Nombre', type: 'text' },
             { label: 'Torre', type: 'text' },
@@ -157,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 field: 'Hora_Salida'
             },
             
-            // 🔑 NUEVO CAMPO: Días de Trabajo (Checkbox Group)
+            // Días de Trabajo (Checkbox Group)
             { 
                 label: 'Días de Trabajo', 
                 type: 'checkbox-group', 
@@ -235,9 +247,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 inputHtml += `</div>`;
             } else {
-                // Incluye los tipos 'text', 'date' y 'time'
+                // Incluye los tipos 'text', 'date', 'time', 'tel' y 'number'
                 const placeholder = field.placeholder ? `placeholder="${field.placeholder}"` : '';
-                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" ${placeholder} class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
+                const minAttr = field.min ? `min="${field.min}"` : '';
+                const maxAttr = field.max ? `max="${field.max}"` : '';
+                inputHtml = `<input type="${field.type}" id="${fieldId}" data-field="${dataField}" ${placeholder} ${minAttr} ${maxAttr} class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2">`;
             }
             
             const conditionalClass = field.isConditional ? 'conditional-field' : '';
@@ -325,17 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         selectedOptions.push(checkbox.value);
                     });
                     
-                    // LÓGICA CLAVE: Si no hay selecciones, se envía "Ninguno" (Solo aplica a 'Puede Salir con')
-                    // Para 'Dias_Trabajo', si no se selecciona nada, se enviará un string vacío o 'Ninguno' si se desea. 
-                    // Por simplicidad, aplicamos la lógica de 'Ninguno' si la lista está vacía solo para "Puede_Salir_Con".
                     if (dataField === 'Puede_Salir_Con') {
                         data[dataField] = selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Ninguno';
                     } else {
                         data[dataField] = selectedOptions.join(', ');
                         if (selectedOptions.length === 0) {
-                            // Se asume que los Días de Trabajo son obligatorios si el campo es visible
-                            // Si Días de Trabajo puede ir vacío, elimina la siguiente línea
-                            // allFieldsValid = false; 
+                             // Validación para días de trabajo u otros checkbox
                         }
                     }
 
@@ -373,7 +382,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errData.message || 'Error en el servidor');
             }
             
+            // 🔑 CAMBIO 3: Lógica de confirmación para el nuevo formulario Proveedor
             switch (formId) {
+                case 'Proveedor':
+                    const codigo = form.querySelector('#proveedor-código-4-dígitos').value;
+                    showConfirmationPopup('Acceso de Proveedor Registrado', `¡Guardado! El código de acceso de 4 dígitos (Código: ${codigo}) se enviará al proveedor vía WhatsApp.`);
+                    break;
                 case 'Eliminar QR':
                     showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
                     break;
@@ -423,5 +437,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-
-
