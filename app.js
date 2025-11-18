@@ -144,9 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Nombre', type: 'text' },
             { label: 'Torre', type: 'text' },
             { label: 'Departamento', type: 'text' },
-            { label: 'Proveedor', type: 'text' },
-            { label: 'Número de WhatsApp', type: 'tel', field: 'Numero_WA' }, // Teléfono para el código
-            { label: 'Código (4 dígitos)', type: 'number', field: 'Codigo_4d', placeholder: 'Este código se envía por WhatsApp', min: '1000', max: '9999' }
+            { label: 'Proveedor', type: 'text' }
         ],
         
         'Personal de servicio': [
@@ -437,3 +435,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
+
