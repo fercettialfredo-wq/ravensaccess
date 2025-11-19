@@ -139,12 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10'] }],
         
-        // 🔑 CAMBIO 2: Nuevo Formulario 'Proveedor'
+        // 🔑 CAMBIO 2: Formulario 'Proveedor' MODIFICADO
         'Proveedor': [
             { label: 'Nombre', type: 'text' },
             { label: 'Torre', type: 'text' },
             { label: 'Departamento', type: 'text' },
             { label: 'Proveedor', type: 'text' }
+            // ELIMINADO: 'Código de 4 dígitos'
         ],
         
         'Personal de servicio': [
@@ -155,46 +156,46 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Foto', type: 'file', field: 'Foto' },
             
             // Selector de Hora de Entrada
-            { 
-                label: 'Hora de Entrada', 
+            {  
+                label: 'Hora de Entrada',  
                 type: 'time',
                 field: 'Hora_Entrada'
             },
             // Selector de Hora de Salida
-            { 
-                label: 'Hora de Salida', 
+            {  
+                label: 'Hora de Salida',  
                 type: 'time',
                 field: 'Hora_Salida'
             },
             
             // Días de Trabajo (Checkbox Group)
-            { 
-                label: 'Días de Trabajo', 
-                type: 'checkbox-group', 
+            {  
+                label: 'Días de Trabajo',  
+                type: 'checkbox-group',  
                 options: [
-                    'Lunes', 
-                    'Martes', 
-                    'Miércoles', 
-                    'Jueves', 
-                    'Viernes', 
-                    'Sábado', 
+                    'Lunes',  
+                    'Martes',  
+                    'Miércoles',  
+                    'Jueves',  
+                    'Viernes',  
+                    'Sábado',  
                     'Domingo'
-                ], 
-                field: 'Dias_Trabajo' 
+                ],  
+                field: 'Dias_Trabajo'  
             },
 
             { label: 'Requiere Revisión', type: 'select', options: ['SÍ', 'NO'], field: 'Requiere_Revision' },
             
             // 'Puede Salir con' (Checkbox Group, sin 'Otros')
-            { 
-                label: 'Puede Salir Con', 
-                type: 'checkbox-group', 
+            {  
+                label: 'Puede Salir Con',  
+                type: 'checkbox-group',  
                 options: [
-                    'Perros', 
-                    'Autos', 
+                    'Perros',  
+                    'Autos',  
                     'Niños'
-                ], 
-                field: 'Puede_Salir_Con' 
+                ],  
+                field: 'Puede_Salir_Con'  
             },
             
             { label: 'Tipo', type: 'select', options: ['Fijo/Planta', 'Eventual'], id: 'tipo-personal' },
@@ -202,18 +203,18 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: 'Fecha Fin', type: 'date', isConditional: true }
         ],
         'Eliminar QR': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Relación', type: 'text' }, { label: 'Nombre QR', type: 'text', field: 'Nombre_QR' } ],
-        'Incidencias': [ 
-            { label: 'Nombre', type: 'text' }, 
-            { label: 'Torre', type: 'text' }, 
-            { label: 'Departamento', type: 'text' }, 
-            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] }, 
+        'Incidencias': [  
+            { label: 'Nombre', type: 'text' },  
+            { label: 'Torre', type: 'text' },  
+            { label: 'Departamento', type: 'text' },  
+            { label: 'Nivel de Urgencia', type: 'select', options: ['Baja', 'Media', 'Alta'] },  
             { label: 'Reportar a', type: 'select', options: ['Administración', 'Ravens Access'] },
-            { label: 'Incidencia', type: 'textarea' } 
+            { label: 'Incidencia', type: 'textarea' }  
         ]
     };
 
     function generateFormContent(formPage) {
-        formPage.innerHTML = ''; 
+        formPage.innerHTML = '';  
         const formId = formPage.dataset.formId;
         const fields = formDefinitions[formId];
         let fieldsHtml = '';
@@ -327,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isVisible = !isConditional || (fieldContainer && fieldContainer.classList.contains('visible'));
 
                 if (!isVisible) {
-                    continue; 
+                    continue;    
                 }
 
                 if (fieldDefinition.type === 'checkbox-group') {
@@ -342,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         data[dataField] = selectedOptions.join(', ');
                         if (selectedOptions.length === 0) {
-                             // Validación para días de trabajo u otros checkbox
+                            // Validación para días de trabajo u otros checkbox
                         }
                     }
 
@@ -351,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const file = fileInput ? fileInput.files[0] : null;
                     if (file) {
                         data[dataField] = await readFileAsBase64(file);
-                    } 
+                    }    
                 }
                 else {
                     const inputElement = form.querySelector(`#${fieldId}`);
@@ -359,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     data[dataField] = currentValue;
 
                     // Validación básica: Si el campo está visible y vacío
-                    if (!currentValue && isVisible) { 
+                    if (!currentValue && isVisible) {    
                         allFieldsValid = false;
                     }
                 }
@@ -372,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(CONFIG.API_PROXY_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data) 
+                body: JSON.stringify(data)    
             });
 
             if (!response.ok) {
@@ -380,11 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errData.message || 'Error en el servidor');
             }
             
-            // 🔑 CAMBIO 3: Lógica de confirmación para el nuevo formulario Proveedor
+            // 🔑 CAMBIO 3: Lógica de confirmación MODIFICADA para Proveedor
             switch (formId) {
                 case 'Proveedor':
-                    const codigo = form.querySelector('#proveedor-código-4-dígitos').value;
-                    showConfirmationPopup('Acceso de Proveedor Registrado', `¡Guardado! El código de acceso de 4 dígitos (Código: ${codigo}) se enviará al proveedor vía WhatsApp.`);
+                    // Se elimina la captura y mención del código de 4 dígitos.
+                    showConfirmationPopup('Acceso de Proveedor Registrado', '¡Guardado! El código de acceso único se enviará al proveedor vía WhatsApp.');
                     break;
                 case 'Eliminar QR':
                     showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
@@ -435,4 +436,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     checkSession();
 });
-
