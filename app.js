@@ -384,16 +384,16 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (formId) {
                 case 'Proveedor':
                     // Confirmación de proveedor sin mención al código, ya que lo genera la Function App
-                    showConfirmationPopup('Acceso de Proveedor Registrado', '¡Guardado! El código de acceso único se enviará al proveedor vía WhatsApp.');
+                    showConfirmationPopup('Acceso de Proveedor Registrado', '¡Guardado! El código de acceso único se enviará vía WhatsApp.');
                     break;
                 case 'Eliminar QR':
-                    showConfirmationPopup('QR Eliminado', '¡Guardado! Eliminaremos su acceso.');
+                    showConfirmationPopup('QR Eliminado', '¡Guardado! El acceso será eliminado.');
                     break;
                 case 'Incidencias':
                     showConfirmationPopup('Incidencia Reportada', 'Gracias por tu reporte, le daremos seguimiento.');
                     break;
                 default:
-                    showConfirmationPopup('Acceso Registrado', '¡Guardado! Haremos llegar el código QR a su WhatsApp.');
+                    showConfirmationPopup('Acceso Registrado', '¡Guardado! El código QR se enviará vía WhatsApp.');
                     break;
             }
         } catch (error) {
