@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SCREENS = {
         LOGIN: 'login-screen',
         MENU: 'menu-screen',
-        PROVEEDOR: 'proveedor-screen' // 🔑 CAMBIO 1: Nueva pantalla para Proveedor
+        PROVEEDOR: 'proveedor-screen'
     };
     
     // --- ESTADO DE LA APLICACIÓN ---
@@ -139,13 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
         'Visita': [ { label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'Motivo', type: 'text' } ],
         'Evento': [{ label: 'Nombre', type: 'text' }, { label: 'Torre', type: 'text' }, { label: 'Departamento', type: 'text' }, { label: 'N QR', type: 'select', options: ['1', '5', '10'] }],
         
-        // 🔑 CAMBIO 2: Formulario 'Proveedor' MODIFICADO
+        // --- FORMULARIO PROVEEDOR MODIFICADO ---
         'Proveedor': [
-            { label: 'Nombre', type: 'text' },
+            { label: 'Asunto', type: 'text' }, // <--- CAMBIO: Nombre reemplazado por Asunto
             { label: 'Torre', type: 'text' },
             { label: 'Departamento', type: 'text' },
             { label: 'Proveedor', type: 'text' }
-            // ELIMINADO: 'Código de 4 dígitos'
         ],
         
         'Personal de servicio': [
@@ -381,10 +380,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(errData.message || 'Error en el servidor');
             }
             
-            // 🔑 CAMBIO 3: Lógica de confirmación MODIFICADA para Proveedor
+            // Lógica de confirmación
             switch (formId) {
                 case 'Proveedor':
-                    // Se elimina la captura y mención del código de 4 dígitos.
+                    // Confirmación de proveedor sin mención al código, ya que lo genera la Function App
                     showConfirmationPopup('Acceso de Proveedor Registrado', '¡Guardado! El código de acceso único se enviará al proveedor vía WhatsApp.');
                     break;
                 case 'Eliminar QR':
